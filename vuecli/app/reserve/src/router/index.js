@@ -10,6 +10,7 @@ import LoginView from "../views/LoginPage.vue";
 import BingoPage from "../views/BingoPage.vue";
 import CouponePage from "../views/couponPage.vue";
 import TeamSelectPage from "../views/TeamSelectPage.vue";
+import PlayerGalleryPage from "../views/PlayerGalleryPage.vue";
 import BasePage from "../views/basePage.vue";
 import CouponList from "../views/couponListPage.vue";
 import MainLayout from "@/layouts/MainLayout.vue";
@@ -74,6 +75,12 @@ const routes = [
         name: "TeamSelect",
         component: TeamSelectPage,
         meta: { title: "チーム選択", requiresAuth: false },
+      },
+      {
+        path: "/playergallery",
+        name: "PlayerGallery",
+        component: PlayerGalleryPage,
+        meta: { title: "選手データ", requiresAuth: false },
       },
       {
         path: "/couponlist",
