@@ -114,7 +114,7 @@ export default {
 
       // 中央のセルにデータベースから取得したnumberを設定
       const centerIndex = 12; // ビンゴの中央のセルのインデックス
-      bingoCells.splice(centerIndex, 0, { number: this.number, name: 'Central', type: 1, marked:false });
+      bingoCells.splice(centerIndex, 0, { number: this.number, name: 'Central', type: 1, marked:true });
 
       return bingoCells;
     },
@@ -220,6 +220,7 @@ export default {
           this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked:false });
           this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked:false });
           console.log(this.bingoCells)
+          await this.saveBingoCells();
         } else {
           this.bingoCells = await this.generateBingoCells();
           await this.saveBingoCells();

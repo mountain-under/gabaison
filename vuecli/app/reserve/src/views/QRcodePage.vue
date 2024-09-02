@@ -5,7 +5,8 @@
       <img loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/93df00fc34138266fdb4a1b858262d23dc5dc1d3f04b1fffdd1ac7810d8282ec?"
         class="img" @click="goToHomePage" />
-        <div class="div-3">QRコードリーダー</div></div>
+      <div class="div-3">QRコードリーダー</div>
+    </div>
     <div class="scanner">
       <div class="instructions">QRコードを<br />カメラにかざしてください</div>
       <div id="qr-reader" class="qr-reader"></div>
@@ -16,22 +17,22 @@
   </div>
 
   <div v-if="bingoAchieved" class="bingo-modal">
-  ビンゴ達成！<br>おめでとうございます！
-</div>
+    ビンゴ達成！<br>おめでとうございます！
+  </div>
 
-<div v-if="holeAchieved" class="bingo-modal">
-  穴が開きました！<br>おめでとうございます！
-</div>
+  <div v-if="holeAchieved" class="bingo-modal">
+    穴が開きました！<br>おめでとうございます！
+  </div>
 </template>
 
 <script>
 import { Html5Qrcode } from "html5-qrcode";
 import { onAuthStateChanged } from "firebase/auth";
 import Firebase from "../firebase/firebase";
-import { getFirestore, getDoc, doc } from 'firebase/firestore';
- 
+import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
+
 const auth = Firebase.auth
- 
+
 const db = getFirestore()
 
 export default {
@@ -41,6 +42,7 @@ export default {
       html5QrCode: null,
       userData: null,
       uid: '',
+      team: '',
       board: [],
       bingoAchieved: false,
       holeAchieved: false,
@@ -55,7 +57,7 @@ export default {
         console.log('User is not logged in.');
       }
     });
- 
+
     await this.getUserData()
   },
   mounted() {
@@ -63,110 +65,136 @@ export default {
   },
 
   methods: {
+    
+    saveBingoCells() {
+      setDoc(doc(db, 'user', this.uid), {
+        bingoCells: this.board,
+        timestamp: new Date(),
+      }, { merge: true }
+      );
+    },
     checkBingo(board) {
-  const size = board.length;
-
-  // 横のラインチェック
-  for (let i = 0; i < size; i++) {
-    if (board[i].every(cell => cell.marked)) {
-      return true;
-    }
-  }
-
-  // 縦のラインチェック
-  for (let j = 0; j < size; j++) {
-    let allMarked = true;
-    for (let i = 0; i < size; i++) {
-      if (!board[i][j].marked) {
-        allMarked = false;
-        break;
+      const size = Math.sqrt(board.length);  // ボードのサイズを計算する
+      if (!Number.isInteger(size)) {
+        console.error('Invalid board size');
+        return false;
       }
-    }
-    if (allMarked) {
-      return true;
-    }
-  }
 
-  // 左上から右下の斜めラインチェック
-  let diagonal1 = true;
-  for (let i = 0; i < size; i++) {
-    if (!board[i][i].marked) {
-      diagonal1 = false;
-      break;
-    }
-  }
-  if (diagonal1) {
-    return true;
-  }
-
-  // 右上から左下の斜めラインチェック
-  let diagonal2 = true;
-  for (let i = 0; i < size; i++) {
-    if (!board[i][size - 1 - i].marked) {
-      diagonal2 = false;
-      break;
-    }
-  }
-  if (diagonal2) {
-    return true;
-  }
-
-  // ビンゴが成立していない
-  return false;
-},
-
- markNumber(board, number, type) {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j].number === number && board[i][j].type === type && board[i][j].marked === false) {
-        board[i][j].marked = true;
-        if (this.checkBingo(board)) {
-          console.log('Bingo!');
-          this.bingoAchieved = true;
-          return true;
-        } else {
-          console.log('Not yet.');
-          this.holeAchieved = true;
-          return false;
+      // 横のラインチェック
+      for (let i = 0; i < size; i++) {
+        let allMarked = true;
+        for (let j = 0; j < size; j++) {
+          if (!board[i * size + j].marked) {
+            allMarked = false;
+            break;
+          }
         }
-        
+        if (allMarked) {
+          return true;
+        }
       }
-    }
-  }
-},
 
-// 使用例
-//markNumber(bingoBoard, 7);  // この番号をマークしてビンゴチェック
+      // 縦のラインチェック
+      for (let j = 0; j < size; j++) {
+        let allMarked = true;
+        for (let i = 0; i < size; i++) {
+          if (!board[i * size + j].marked) {
+            allMarked = false;
+            break;
+          }
+        }
+        if (allMarked) {
+          return true;
+        }
+      }
+
+      // 左上から右下の斜めラインチェック
+      let diagonal1 = true;
+      for (let i = 0; i < size; i++) {
+        if (!board[i * size + i].marked) {
+          diagonal1 = false;
+          break;
+        }
+      }
+      if (diagonal1) {
+        return true;
+      }
+
+      // 右上から左下の斜めラインチェック
+      let diagonal2 = true;
+      for (let i = 0; i < size; i++) {
+        if (!board[i * size + (size - 1 - i)].marked) {
+          diagonal2 = false;
+          break;
+        }
+      }
+      if (diagonal2) {
+        return true;
+      }
+
+      // ビンゴが成立していない
+      return false;
+    },
+
+    async markNumber(board, number, type) {
+      console.log(board, number, type);
+      for (let i = 0; i < board.length; i++) {
+        if (board[i].number === number && board[i].type === type && board[i].marked === false) {
+          console.log('Marked!');
+          board[i].marked = true;
+          if (this.checkBingo(board)) {
+            console.log('Bingo!');
+            this.bingoAchieved = true;
+            this.saveBingoCells();
+            return true;
+          } else {
+            console.log('Not yet.');
+            this.holeAchieved = true;
+            this.saveBingoCells();
+            return false;
+          }
+        }
+      }
+      
+    },
+
+    // 使用例
+    //markNumber(bingoBoard, 7);  // この番号をマークしてビンゴチェック
 
 
     async getUserData() {
       try {
         const querySnapshot = await getDoc(doc(db, 'user', this.uid));
         this.userData = querySnapshot.data()
-        this.board = this.userData["bingo"]
+        this.board = this.userData["bingoCells"]
+        this.team = this.userData["team"]
         console.log(this.board)
 
       } catch (error) {
         console.error('Error fetching TA and Technical Assistant data: ', error);
       }
     },
-    startScanner() {
+    async startScanner() {
       this.html5QrCode = new Html5Qrcode("qr-reader");
       const qrCodeSuccessCallback = (decodedText) => {
         this.html5QrCode.stop().then(() => {
           const values = decodedText.split(';');
-    
-    // 分割された値を取り出す
-          this.$router.push({
-            name: 'checkInOutPage',
+          console.log(values)
+
+          this.markNumber(this.board, parseInt(values[1]), 1);
+          this.scheduleScreenTransition();
+
+          // 分割された値を取り出す
+          // this.$router.push({
+          //   name: 'checkInOutPage',
 
 
-            params: {
-              uid:  values[0],
-              number:  values[1],
-              team:  values[2],
-            }
-          });  // QRコード読み取り成功後に次のページに遷移
+          //   params: {
+          //     uid:  values[0],
+          //     number:  values[1],
+          //     team: values[2],
+          //   }
+          // });  // QRコード読み取り成功後に次のページに遷移
         }).catch((err) => {
           console.error("Failed to stop scanning.", err);
         });
@@ -189,9 +217,20 @@ export default {
           console.log(`Error: ${err.message}`);
         });
     },
-    goToHomePage(){
-      this.$router.push({name: "Home"});
-    }
+    goToHomePage() {
+      this.$router.push({ name: "Home" });
+    },
+    scheduleScreenTransition() {
+    setTimeout(() => {
+      if (this.bingoAchieved) {
+        this.$router.push( `/coupon${1}` );  // 遷移するページを指定
+      } else {
+        this.$router.push({ name: "Home" });  // 遷移するページを指定
+      }
+    
+    }, 2000);  // 2000ミリ秒（2秒）後に遷移
+  },
+
   }
 };
 </script>
@@ -206,6 +245,7 @@ export default {
   line-height: 150%;
   margin: 0 auto;
 }
+
 .div-2 {
   background-color: #2c4e61;
   display: flex;
@@ -217,10 +257,11 @@ export default {
   white-space: nowrap;
   text-align: center;
   letter-spacing: -0.38px;
-   display: flex;
-    justify-content: center; /* 子要素を中央揃え */
-    position: relative;
-    padding: 30px 0 10px;
+  display: flex;
+  justify-content: center;
+  /* 子要素を中央揃え */
+  position: relative;
+  padding: 30px 0 10px;
   font-weight: bold;
   font-size: 20px;
 
@@ -231,8 +272,8 @@ export default {
   object-fit: auto;
   object-position: center;
   width: 54px;
-    position: absolute;
-    left: 0; 
+  position: absolute;
+  left: 0;
 }
 
 .div-3 {
@@ -255,6 +296,7 @@ export default {
   line-height: 150%;
   margin: 0 auto;
 }
+
 .header {
   background-color: #2c4e61;
   width: 100%;
@@ -264,6 +306,7 @@ export default {
   padding: 60px 60px 18px;
   font: 20px M PLUS Code Latin, sans-serif;
 }
+
 .scanner {
   display: flex;
   margin-top: 65px;
@@ -276,23 +319,28 @@ export default {
   line-height: 42px;
   padding: 0 30px;
 }
+
 .instructions {
   font-family: M PLUS Code Latin, sans-serif;
   color: black;
 }
+
 .qr-reader {
   margin: 0px auto;
   width: 100%;
 }
+
 .results {
   margin-top: 20px;
   font-size: 18px;
 }
+
 .error {
   margin-top: 20px;
   font-size: 18px;
   color: red;
 }
+
 .footer {
   background-color: #2c4e61;
   margin-top: 55px;
@@ -303,6 +351,7 @@ export default {
   padding: 20px 60px;
   font: 14px M PLUS Code Latin, sans-serif;
 }
+
 .sunapp {
   color: #ebfffe;
 }
@@ -333,5 +382,4 @@ export default {
   letter-spacing: -0.27px;
   justify-content: center;
   font: 700 20px M PLUS Code Latin, sans-serif;
-}
-</style>
+}</style>
