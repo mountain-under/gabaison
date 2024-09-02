@@ -1,20 +1,16 @@
 <template>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="title-conatiner">
     <div class="upper">ホーム</div>
     <div class="lower"></div>
   </div>
 
   <div class="body-conatiner">
-
+    <img loading="lazy"
+      src="https://cdn.builder.io/api/v1/image/assets/TEMP/a735cab541df0a2ebb0694177468ec5832da1c6e573c68524985aa4fcd7d7fdf?"
+      class="QRbutton" @click="goToQrpage" />
   </div>
 
-  <img
-      loading="lazy"
-      src="https://cdn.builder.io/api/v1/image/assets/TEMP/a735cab541df0a2ebb0694177468ec5832da1c6e573c68524985aa4fcd7d7fdf?"
-      class="img"
-      @click="goToQrpage"
-    />
 </template>
 
 <script>
@@ -35,15 +31,15 @@ html {
 
 
 .img {
-      aspect-ratio: 1;
-      object-fit: auto;
-      object-position: center;
-      width: 213px;
-      height: 213px;
-      margin-top: 30px;
-      max-width: 100%;
-      border-radius: 5px;
-    }
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 213px;
+  height: 213px;
+  margin-top: 30px;
+  max-width: 100%;
+  border-radius: 5px;
+}
 
 .title-conatiner {
   width: 100%;
@@ -78,12 +74,22 @@ html {
 
 .body-conatiner {
   width: 100%;
-  height: 600px;
+  height: 700px;
   flex-grow: 1;
   /*サガン鳥栖*/
   background-color: #CAE3EC;
   margin: 0;
   /*ヴィッセル神戸*/
   /* background-color: #D9D9D9; */
+}
+
+.QRbutton {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  bottom: 100px;
+  right: 10px;
+  border-radius: 50%;
+  z-index: 10;
 }
 </style>

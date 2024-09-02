@@ -1,20 +1,23 @@
 <template>
-  <div class="div">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div class="div-2">
+  <!-- <div class="div"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="title-conatiner">
+    <router-link to="/" class="nav-link">
       <img loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/93df00fc34138266fdb4a1b858262d23dc5dc1d3f04b1fffdd1ac7810d8282ec?"
-        class="img" @click="goToHomePage" />
-      <div class="div-3">QRコードリーダー</div>
-    </div>
-    <div class="scanner">
-      <div class="instructions">QRコードを<br />カメラにかざしてください</div>
-      <div id="qr-reader" class="qr-reader"></div>
-      <div id="qr-reader-results" class="results"></div>
-      <div id="qr-reader-error" class="error"></div>
-
-    </div>
+        class="img" />
+    </router-link>
+    <div class="upper">QRコードリーダー</div>
+    <div class="lower"></div>
   </div>
+  <div class="scanner">
+    <div class="instructions">QRコードを<br />カメラにかざしてください</div>
+    <div id="qr-reader" class="qr-reader"></div>
+    <div id="qr-reader-results" class="results"></div>
+    <div id="qr-reader-error" class="error"></div>
+
+  </div>
+  <!-- </div> -->
 
   <div v-if="bingoAchieved" class="bingo-modal">
     ビンゴ達成！<br>おめでとうございます！
@@ -263,7 +266,7 @@ export default {
   position: relative;
   padding: 30px 0 10px;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 36px;
 
 }
 
@@ -309,15 +312,15 @@ export default {
 
 .scanner {
   display: flex;
-  margin-top: 65px;
+  padding: 60px 30px;
   width: 100%;
+  height: 700px;
+  font-size: 24px;
+  background-color: #CAE3EC;
   flex-direction: column;
-  font-size: 28px;
-  color: #ebfffe;
   white-space: nowrap;
   letter-spacing: -0.53px;
   line-height: 42px;
-  padding: 0 30px;
 }
 
 .instructions {
@@ -382,4 +385,48 @@ export default {
   letter-spacing: -0.27px;
   justify-content: center;
   font: 700 20px M PLUS Code Latin, sans-serif;
-}</style>
+}
+
+.title-conatiner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upper {
+  width: 100%;
+
+  /*サガン鳥栖*/
+  background-color: #00A0D2;
+  color: white;
+  /*ヴィッセル神戸*/
+  /* background-color: #FFFFFF; */
+  /* color: #A40931; */
+
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.lower {
+  width: 100%;
+  height: 20px;
+
+  /*サガン鳥栖*/
+  background-color: #EC80B4;
+  /*ヴィッセル神戸*/
+  /* background-color: #000000; */
+}
+
+.body-conatiner {
+  width: 100%;
+  height: 600px;
+  flex-grow: 1;
+
+  /*サガン鳥栖*/
+  background-color: #CAE3EC;
+  /*ヴィッセル神戸*/
+  /* background-color: #D9D9D9; */
+}
+</style>

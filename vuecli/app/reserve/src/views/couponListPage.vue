@@ -97,7 +97,7 @@ export default {
 
 .body-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
   flex-grow: 1;
   background-color: #CAE3EC;
 }
