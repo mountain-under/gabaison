@@ -16,6 +16,7 @@ import MainLayout from "@/layouts/MainLayout.vue";
 
 const routes = [
   {
+
     path: "/",
     component: MainLayout, // すべてのページを共通レイアウトでラップ
     children: [
@@ -90,6 +91,7 @@ const routes = [
     meta: { title: "Login", requiresAuth: false },
   },
 ];
+
 
 
 
