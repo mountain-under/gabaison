@@ -36,9 +36,10 @@ const routes = [
 
   },
   {
-    path: '/coupon',
+    path: '/coupon:couponId',
     name: 'coupon',
     component: CouponePage,
+    props: true, 
     meta: { title: 'CouponePage', requiresAuth: false}
 
   },
@@ -78,7 +79,7 @@ const routes = [
 
   },
     {
-        path: 'teamselect',
+        path: '/teamselect',
         name: 'TeamSelect',
         component: TeamSelectPage,
         meta: { title: 'チーム選択', requiresAuth: false}
