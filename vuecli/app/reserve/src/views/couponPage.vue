@@ -1,6 +1,15 @@
 <template>
   <div class="coupon-container">
-    <!-- Header -->
+
+    <!-- ロード画面 -->
+    <div v-if="isLoading" class="loading-screen">
+      <div class="spinner"></div> <!-- スピナー（ロード中のアニメーション） -->
+      <p>読み込み中...</p>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div v-else>
+      <!-- Header -->
         <header class="header">
       <!-- ヘッダー画像を追加 -->
       <img :src="headerImageUrl" alt="Coupon Header" class="header-image">
@@ -54,12 +63,20 @@
       </nav>
     </footer>
   </div>
+  </div>
 </template>
 
 <script>
+import confetti from 'canvas-confetti'; // クラッカーのエフェクト用ライブラリをインポート
 
 export default {
   name: 'CouponPage',
+
+  data() {
+    return {
+      isLoading: true, // ロード状態を管理
+    };
+  },
   props: {
     couponId: String,  // couponIdをpropsとして受け取る
   },
@@ -93,10 +110,57 @@ export default {
   created() {
     console.log(this.couponId);
   },
+  mounted() {
+    // 2秒後にロード状態を解除し、クラッカーのエフェクトを実行
+    setTimeout(() => {
+      this.isLoading = false;
+      this.launchConfetti(); // クラッカーのエフェクトを実行
+    }, 1800);
+  },
+  methods: {
+    launchConfetti() {
+      // クラッカーのエフェクトを表示する関数
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    },
+  },
 };
 </script>
 
 <style scoped>
+/* ロード画面のスタイル */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .coupon-container {
   display: flex;
   flex-direction: column;
@@ -138,7 +202,7 @@ export default {
 
 .coupon-info p { /*佐賀でのお食事やお買い物をお楽しみください*/
   margin-bottom: 14.5px;
-  font-size: 13px; /* 必要に応じてフォントサイズを設定 */
+  font-size: 12.5px; /* 必要に応じてフォントサイズを設定 */
 }
 
 span.points-label {
@@ -166,6 +230,7 @@ span.points-label {
   margin: 19px;
   color: #929292;
   font-size: 10px;
+  margin-bottom: 150px;
 }
 
 .footer {
