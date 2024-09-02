@@ -12,6 +12,9 @@ import infoPage from '../views/InfoPage.vue'
 import listPage from '../views/listPage.vue'
 import LoginView from '../views/LoginPage.vue'
 import BingoPage from '../views/BingoPage.vue'
+import CouponePage from '../views/couponPage.vue'
+
+import BasePage from '../views/basePage.vue'
 
 const routes = [
   {
@@ -22,10 +25,24 @@ const routes = [
 
   },
   {
+    path: '/base',
+    name: 'Base',
+    component: BasePage,
+    meta: { title: 'Base', requiresAuth: false}
+
+  },
+  {
     path: '/qrcode',
     name: 'qrcodeReader',
     component: QRCodePage,
     meta: { title: 'QRCodeReader', requiresAuth: false}
+
+  },
+  {
+    path: '/coupon',
+    name: 'coupon',
+    component: CouponePage,
+    meta: { title: 'CouponePage', requiresAuth: false}
 
   },
   {
@@ -35,7 +52,7 @@ const routes = [
     props: true, 
     meta: { title: '予約削除', requiresAuth: false}
   },
-  
+  {
     path: '/Info',
     name: 'infoPage',
     component: infoPage,
