@@ -1,8 +1,5 @@
-// src/router/index.ts
 import { createRouter, createWebHashHistory } from 'vue-router';
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
 
 
 import HelloPage from '../views/consoleHomePage.vue'
@@ -13,7 +10,7 @@ import listPage from '../views/listPage.vue'
 import LoginView from '../views/LoginPage.vue'
 import BingoPage from '../views/BingoPage.vue'
 import CouponePage from '../views/couponPage.vue'
-
+import TeamSelectPage from '../views/TeamSelectPage.vue';
 import BasePage from '../views/basePage.vue'
 
 const routes = [
@@ -71,6 +68,7 @@ const routes = [
     name: 'login',
     component: LoginView,
     meta: { title: 'Login', requiresAuth: false}
+
   },
   {
     path: '/bingo',
@@ -79,6 +77,12 @@ const routes = [
     meta: { title: 'bingo', requiresAuth: false}
 
   },
+    {
+        path: 'teamselect',
+        name: 'TeamSelect',
+        component: TeamSelectPage,
+        meta: { title: 'チーム選択', requiresAuth: false}
+     }
 ]
 
 const router = createRouter({
@@ -91,36 +95,34 @@ const router = createRouter({
   },
 });
 
-
-router.afterEach((titleString) => {
-  document.title = titleString.meta.title + ' | '
+router.afterEach((to) => {
+  document.title = to.meta.title + ' | reserve';
 });
 
 // 画面遷移前にログイン済みかをチェックして、未ログイン時はログイン画面に強制遷移させる
-let onAuthStateChangedUnsubscribe
+let onAuthStateChangedUnsubscribe;
 router.beforeEach((to, from, next) => {
-    const auth = getAuth()
+    const auth = getAuth();
 
     if (!to.matched.some(record => record.meta.requiresAuth)) {
-        next()
+        next();
     } else {
         if (auth.currentUser) {
-            next()
-            return
+            next();
+            return;
         } else {
             if (typeof onAuthStateChangedUnsubscribe === 'function') {
-                onAuthStateChangedUnsubscribe()
+                onAuthStateChangedUnsubscribe();
             }
-            onAuthStateChanged(auth, (user) => {
+            onAuthStateChangedUnsubscribe = onAuthStateChanged(auth, (user) => {
                 if (user) {
-                    next()
+                    next();
                 } else {
-                    next({ name: 'login' })
+                    next({ name: 'login' });
                 }
-            })
+            });
         }
     }
-})
-
+});
 
 export default router;
