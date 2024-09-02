@@ -12,62 +12,82 @@ import BingoPage from '../views/BingoPage.vue'
 import CouponePage from '../views/couponPage.vue'
 import TeamSelectPage from '../views/TeamSelectPage.vue';
 import BasePage from '../views/basePage.vue'
+import MainLayout from '@/layouts/MainLayout.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: HelloPage,
-    meta: { title: 'Home', requiresAuth: false}
-
-  },
-  {
-    path: '/base',
-    name: 'Base',
-    component: BasePage,
-    meta: { title: 'Base', requiresAuth: false}
-
-  },
-  {
-    path: '/qrcode',
-    name: 'qrcodeReader',
-    component: QRCodePage,
-    meta: { title: 'QRCodeReader', requiresAuth: false}
-
-  },
-  {
-    path: '/coupon',
-    name: 'coupon',
-    component: CouponePage,
-    meta: { title: 'CouponePage', requiresAuth: false}
-
-  },
-  {
-    path: '/deletePage/:reserveId',
-    name: 'deletePage',
-    component: deletePage,
-    props: true, 
-    meta: { title: '予約削除', requiresAuth: false}
-  },
-  {
-    path: '/Info',
-    name: 'infoPage',
-    component: infoPage,
-    meta: { title: 'チェックイン/アウト', requiresAuth: true}
-  },
-
-  {
-    path: '/list',
-    name: 'list',
-    component: listPage,
-    meta: { title: '予約者リスト', requiresAuth: false}
-
+    component: MainLayout, // すべてのページを共通レイアウトでラップ
+    children: [
+      {
+        path: '/',
+        name: 'Home',
+        component: HelloPage,
+        meta: { title: 'Home', requiresAuth: true}
+    
+      },
+      {
+        path: '/base',
+        name: 'Base',
+        component: BasePage,
+        meta: { title: 'Base', requiresAuth: false}
+    
+      },
+      {
+        path: 'qrcode',
+        name: 'qrcodeReader',
+        component: QRCodePage,
+        meta: { title: 'QRCodeReader', requiresAuth: true}
+      },
+      {
+        path: '/coupon',
+        name: 'coupon',
+        component: CouponePage,
+        meta: { title: 'CouponePage', requiresAuth: false}
+    
+      },
+      {
+        path: 'deletePage/:reserveId',
+        name: 'deletePage',
+        component: deletePage,
+        props: true, 
+        meta: { title: '予約削除', requiresAuth: true}
+      },
+      
+      {
+        path: '/Info',
+        name: 'infoPage',
+        component: infoPage,
+        meta: { title: 'チェックイン/アウト', requiresAuth: true}
+      },
+      {
+        path: '/list',
+        name: 'list',
+        component: listPage,
+        meta: { title: '予約者リスト', requiresAuth: false}
+    
+      },
+      {
+        path: '/bingo',
+        name: 'bingo',
+        component: BingoPage,
+        meta: { title: 'bingo', requiresAuth: false}
+    
+      },
+        {
+            path: '/teamselect',
+            name: 'TeamSelect',
+            component: TeamSelectPage,
+            meta: { title: 'チーム選択', requiresAuth: true}
+         }
+    ]
   },
   {
     path: '/login',
     name: 'login',
     component: LoginView,
     meta: { title: 'Login', requiresAuth: false}
+
 
   },
   {
@@ -83,7 +103,9 @@ const routes = [
     component: TeamSelectPage,
     meta: { title: 'チーム選択', requiresAuth: false}
   }
+
 ]
+
 
 const router = createRouter({
   history: createWebHashHistory(),

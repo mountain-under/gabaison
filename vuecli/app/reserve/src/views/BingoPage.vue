@@ -50,6 +50,7 @@ const auth = Firebase.auth
  
 const db = getFirestore()
 
+
 export default {
   data() {
     return {
@@ -112,11 +113,15 @@ export default {
       this.showPopup = false;
     },
     getImageForType(type) {
+
+      // タイプに応じた画像パスを返す
       switch (type) {
         case 1:
           return require('@/assets/bingo-saganT.png');
         case 2:
           return require('@/assets/bingo-visselT.png');
+        // case 'C':
+        //   return require('@/assets/typeC.png');
         default:
           return '';
       }
@@ -133,8 +138,13 @@ export default {
         console.error('Error fetching TA and Technical Assistant data: ', error);
       }
     },
-  }
-}
+  },
+  computed: {
+    teamClass() {
+      return this.team === 'ヴィッセル神戸' ? 'vissel' : 'tosu';
+    },
+},
+};
 </script>
 
 <style scoped>
@@ -142,6 +152,35 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   margin-top: 60px;
+  position: relative; /* 子要素の配置基準とする */
+  border: 2px solid rgb(90, 90, 90); /* 黒い線で囲む */
+  padding: 20px; /* 内側の余白を追加 */
+  border-radius: 5px; /* 角を少し丸くする場合 */
+}
+
+#app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* #app の高さに合わせる */
+  background-image: url('/app/reserve/src/assets/sagantosu.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.2; /* エンブレム画像の透明度を設定 */
+  z-index: -1; /* 他のコンテンツの後ろに配置 */
+  background-size: auto 100%; 
+}
+
+/* ヴィッセル神戸の場合の背景 */
+#app.vissel::before {
+  background-image: url('/app/reserve/src/assets/fe-vissel-kobe.webp');
+}
+
+/* サガン鳥栖の場合の背景 */
+#app.tosu::before {
+  background-image: url('/app/reserve/src/assets/sagantosu.webp');
 }
 
 .bingo-grid {
@@ -158,6 +197,7 @@ export default {
   align-items: center;
   justify-content: center;
   background-size: cover;
+  /* 背景画像をセルのサイズに合わせる */
   background-position: center;
   border: 2px solid #ccc;
   cursor: pointer;
@@ -172,10 +212,17 @@ export default {
 .bingo-cell:hover {
   background-color: rgba(0, 0, 0, 0.2); /* 画像の上にホバー効果を適用 */
   transform: scale(1.1);
+  color: white;
+  /* 数字の色を白に設定 */
+  text-shadow: 1px 1px 2px black;
+  /* 数字の視認性を高めるための影 */
 }
 
+
 .bingo-cell.selected {
-  background-color: rgba(255, 204, 0, 0.6); /* 画像の上に選択時の背景色を適用 */
+
+  background-color: rgba(255, 204, 0, 0.6);
+  /* 画像の上に選択時の背景色を適用 */
   border-color: #ff9900;
 }
 
@@ -221,6 +268,8 @@ export default {
   text-align: center;
   border: 2px solid #ccc;
   border-radius: 5px;
+  text-shadow: 2px 2px 4px black;
+  /* 数字の視認性を高めるための影 */
 }
 
 .popup-overlay {
@@ -271,6 +320,7 @@ export default {
     transform: scale(0.5);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
