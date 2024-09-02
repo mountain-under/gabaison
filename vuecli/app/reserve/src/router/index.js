@@ -78,7 +78,7 @@ const routes = [
 
   },
     {
-        path: 'teamselect',
+        path: '/teamselect',
         name: 'TeamSelect',
         component: TeamSelectPage,
         meta: { title: 'チーム選択', requiresAuth: false}
