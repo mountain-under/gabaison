@@ -87,8 +87,24 @@ const routes = [
     name: 'login',
     component: LoginView,
     meta: { title: 'Login', requiresAuth: false}
-  }
-];
+
+
+  },
+  {
+    path: '/bingo',
+    name: 'bingo',
+    component: BingoPage,
+    meta: { title: 'bingo', requiresAuth: false}
+
+  },
+    {
+        path: '/teamselect',
+        name: 'TeamSelect',
+        component: TeamSelectPage,
+        meta: { title: 'チーム選択', requiresAuth: false}
+     }
+]
+
 
 const router = createRouter({
   history: createWebHashHistory(),
