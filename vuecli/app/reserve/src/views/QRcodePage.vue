@@ -1,27 +1,31 @@
 <template>
-  <div class="div">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div class="div-2">
+  <!-- <div class="div"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="title-conatiner">
+    <router-link to="/" class="nav-link">
       <img loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/93df00fc34138266fdb4a1b858262d23dc5dc1d3f04b1fffdd1ac7810d8282ec?"
-        class="img" @click="goToHomePage" />
-        <div class="div-3">QRコードリーダー</div></div>
-    <div class="scanner">
-      <div class="instructions">QRコードを<br />カメラにかざしてください</div>
-      <div id="qr-reader" class="qr-reader"></div>
-      <div id="qr-reader-results" class="results"></div>
-      <div id="qr-reader-error" class="error"></div>
-
-    </div>
+        class="img" />
+    </router-link>
+    <div class="upper">QRコードリーダー</div>
+    <div class="lower"></div>
   </div>
+  <div class="scanner">
+    <div class="instructions">QRコードを<br />カメラにかざしてください</div>
+    <div id="qr-reader" class="qr-reader"></div>
+    <div id="qr-reader-results" class="results"></div>
+    <div id="qr-reader-error" class="error"></div>
+
+  </div>
+  <!-- </div> -->
 
   <div v-if="bingoAchieved" class="bingo-modal">
-  ビンゴ達成！<br>おめでとうございます！
-</div>
+    ビンゴ達成！<br>おめでとうございます！
+  </div>
 
-<div v-if="holeAchieved" class="bingo-modal">
-  穴が開きました！<br>おめでとうございます！
-</div>
+  <div v-if="holeAchieved" class="bingo-modal">
+    穴が開きました！<br>おめでとうございます！
+  </div>
 </template>
 
 <script>
@@ -29,9 +33,9 @@ import { Html5Qrcode } from "html5-qrcode";
 import { onAuthStateChanged } from "firebase/auth";
 import Firebase from "../firebase/firebase";
 import { getFirestore, getDoc, doc } from 'firebase/firestore';
- 
+
 const auth = Firebase.auth
- 
+
 const db = getFirestore()
 
 export default {
@@ -55,7 +59,7 @@ export default {
         console.log('User is not logged in.');
       }
     });
- 
+
     await this.getUserData()
   },
   mounted() {
@@ -64,79 +68,79 @@ export default {
 
   methods: {
     checkBingo(board) {
-  const size = board.length;
+      const size = board.length;
 
-  // 横のラインチェック
-  for (let i = 0; i < size; i++) {
-    if (board[i].every(cell => cell.marked)) {
-      return true;
-    }
-  }
-
-  // 縦のラインチェック
-  for (let j = 0; j < size; j++) {
-    let allMarked = true;
-    for (let i = 0; i < size; i++) {
-      if (!board[i][j].marked) {
-        allMarked = false;
-        break;
-      }
-    }
-    if (allMarked) {
-      return true;
-    }
-  }
-
-  // 左上から右下の斜めラインチェック
-  let diagonal1 = true;
-  for (let i = 0; i < size; i++) {
-    if (!board[i][i].marked) {
-      diagonal1 = false;
-      break;
-    }
-  }
-  if (diagonal1) {
-    return true;
-  }
-
-  // 右上から左下の斜めラインチェック
-  let diagonal2 = true;
-  for (let i = 0; i < size; i++) {
-    if (!board[i][size - 1 - i].marked) {
-      diagonal2 = false;
-      break;
-    }
-  }
-  if (diagonal2) {
-    return true;
-  }
-
-  // ビンゴが成立していない
-  return false;
-},
-
- markNumber(board, number, type) {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j].number === number && board[i][j].type === type && board[i][j].marked === false) {
-        board[i][j].marked = true;
-        if (this.checkBingo(board)) {
-          console.log('Bingo!');
-          this.bingoAchieved = true;
+      // 横のラインチェック
+      for (let i = 0; i < size; i++) {
+        if (board[i].every(cell => cell.marked)) {
           return true;
-        } else {
-          console.log('Not yet.');
-          this.holeAchieved = true;
-          return false;
         }
-        
       }
-    }
-  }
-},
 
-// 使用例
-//markNumber(bingoBoard, 7);  // この番号をマークしてビンゴチェック
+      // 縦のラインチェック
+      for (let j = 0; j < size; j++) {
+        let allMarked = true;
+        for (let i = 0; i < size; i++) {
+          if (!board[i][j].marked) {
+            allMarked = false;
+            break;
+          }
+        }
+        if (allMarked) {
+          return true;
+        }
+      }
+
+      // 左上から右下の斜めラインチェック
+      let diagonal1 = true;
+      for (let i = 0; i < size; i++) {
+        if (!board[i][i].marked) {
+          diagonal1 = false;
+          break;
+        }
+      }
+      if (diagonal1) {
+        return true;
+      }
+
+      // 右上から左下の斜めラインチェック
+      let diagonal2 = true;
+      for (let i = 0; i < size; i++) {
+        if (!board[i][size - 1 - i].marked) {
+          diagonal2 = false;
+          break;
+        }
+      }
+      if (diagonal2) {
+        return true;
+      }
+
+      // ビンゴが成立していない
+      return false;
+    },
+
+    markNumber(board, number, type) {
+      for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+          if (board[i][j].number === number && board[i][j].type === type && board[i][j].marked === false) {
+            board[i][j].marked = true;
+            if (this.checkBingo(board)) {
+              console.log('Bingo!');
+              this.bingoAchieved = true;
+              return true;
+            } else {
+              console.log('Not yet.');
+              this.holeAchieved = true;
+              return false;
+            }
+
+          }
+        }
+      }
+    },
+
+    // 使用例
+    //markNumber(bingoBoard, 7);  // この番号をマークしてビンゴチェック
 
 
     async getUserData() {
@@ -155,16 +159,16 @@ export default {
       const qrCodeSuccessCallback = (decodedText) => {
         this.html5QrCode.stop().then(() => {
           const values = decodedText.split(';');
-    
-    // 分割された値を取り出す
+
+          // 分割された値を取り出す
           this.$router.push({
             name: 'checkInOutPage',
 
 
             params: {
-              uid:  values[0],
-              number:  values[1],
-              team:  values[2],
+              uid: values[0],
+              number: values[1],
+              team: values[2],
             }
           });  // QRコード読み取り成功後に次のページに遷移
         }).catch((err) => {
@@ -189,8 +193,8 @@ export default {
           console.log(`Error: ${err.message}`);
         });
     },
-    goToHomePage(){
-      this.$router.push({name: "Home"});
+    goToHomePage() {
+      this.$router.push({ name: "home" });
     }
   }
 };
@@ -206,6 +210,7 @@ export default {
   line-height: 150%;
   margin: 0 auto;
 }
+
 .div-2 {
   background-color: #2c4e61;
   display: flex;
@@ -217,12 +222,13 @@ export default {
   white-space: nowrap;
   text-align: center;
   letter-spacing: -0.38px;
-   display: flex;
-    justify-content: center; /* 子要素を中央揃え */
-    position: relative;
-    padding: 30px 0 10px;
+  display: flex;
+  justify-content: center;
+  /* 子要素を中央揃え */
+  position: relative;
+  padding: 30px 0 10px;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 36px;
 
 }
 
@@ -231,8 +237,8 @@ export default {
   object-fit: auto;
   object-position: center;
   width: 54px;
-    position: absolute;
-    left: 0; 
+  position: absolute;
+  left: 0;
 }
 
 .div-3 {
@@ -255,6 +261,7 @@ export default {
   line-height: 150%;
   margin: 0 auto;
 }
+
 .header {
   background-color: #2c4e61;
   width: 100%;
@@ -264,35 +271,41 @@ export default {
   padding: 60px 60px 18px;
   font: 20px M PLUS Code Latin, sans-serif;
 }
+
 .scanner {
   display: flex;
-  margin-top: 65px;
+  padding: 60px 30px;
   width: 100%;
+  height: 700px;
+  font-size: 24px;
+  background-color: #CAE3EC;
   flex-direction: column;
-  font-size: 28px;
-  color: #ebfffe;
   white-space: nowrap;
   letter-spacing: -0.53px;
   line-height: 42px;
-  padding: 0 30px;
 }
+
 .instructions {
   font-family: M PLUS Code Latin, sans-serif;
   color: black;
 }
+
 .qr-reader {
   margin: 0px auto;
   width: 100%;
 }
+
 .results {
   margin-top: 20px;
   font-size: 18px;
 }
+
 .error {
   margin-top: 20px;
   font-size: 18px;
   color: red;
 }
+
 .footer {
   background-color: #2c4e61;
   margin-top: 55px;
@@ -303,6 +316,7 @@ export default {
   padding: 20px 60px;
   font: 14px M PLUS Code Latin, sans-serif;
 }
+
 .sunapp {
   color: #ebfffe;
 }
@@ -333,5 +347,48 @@ export default {
   letter-spacing: -0.27px;
   justify-content: center;
   font: 700 20px M PLUS Code Latin, sans-serif;
+}
+
+.title-conatiner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upper {
+  width: 100%;
+
+  /*サガン鳥栖*/
+  background-color: #00A0D2;
+  color: white;
+  /*ヴィッセル神戸*/
+  /* background-color: #FFFFFF; */
+  /* color: #A40931; */
+
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.lower {
+  width: 100%;
+  height: 20px;
+
+  /*サガン鳥栖*/
+  background-color: #EC80B4;
+  /*ヴィッセル神戸*/
+  /* background-color: #000000; */
+}
+
+.body-conatiner {
+  width: 100%;
+  height: 600px;
+  flex-grow: 1;
+
+  /*サガン鳥栖*/
+  background-color: #CAE3EC;
+  /*ヴィッセル神戸*/
+  /* background-color: #D9D9D9; */
 }
 </style>

@@ -1,20 +1,22 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <div class="div">
-    <div class="div-2">ユーザ情報</div>
-
+  <div class="title-conatiner">
+    <div class="upper">ユーザ情報</div>
+    <div class="lower"></div>
+  </div>
+  <div class="body-conatiner">
     <div ref="qrCodeContainer">
       <img :src="geturl" :alt="uid" class="img" />
     </div>
-    <button class="div-4" @click="reload">
-      <div class="div-5">更新</div>
+    <button class="refresh-button" @click="reload">
+      更新
     </button>
 
 
     <div class="div-10">
 
       <p v-if="userData">
-        名前   ：{{ this.userData["name"] ?? 0 }} <br>
+        名前 ：{{ this.userData["name"] ?? 0 }} <br>
         Myチーム： {{ this.userData["team"] ?? 0 }}<br>
 
       </p>
@@ -39,7 +41,7 @@ export default {
       number: 2,
       userData: null,
       team: '',
-      
+
     };
   },
   async created() {
@@ -59,8 +61,8 @@ export default {
     allowance() {
       return 300 * this.childrenCount;
     },
-    geturl(){
-      return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.uid)+';'+encodeURIComponent(this.number)+';'+encodeURIComponent(this.team)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=10&ecc=L&size=213x213`;
+    geturl() {
+      return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.uid) + ';' + encodeURIComponent(this.number) + ';' + encodeURIComponent(this.team)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=10&ecc=L&size=213x213`;
     }
   },
   methods: {
@@ -84,14 +86,72 @@ export default {
         console.error('Error fetching TA and Technical Assistant data: ', error);
       }
     },
-    async reload(){
+    async reload() {
       await this.getUserData()
     }
   }
 }
 </script>
-  
+
 <style scoped>
+.title-conatiner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upper {
+  width: 100%;
+
+  /*サガン鳥栖*/
+  background-color: #00A0D2;
+  color: white;
+  /*ヴィッセル神戸*/
+  /* background-color: #FFFFFF; */
+  /* color: #A40931; */
+
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.lower {
+  width: 100%;
+  height: 20px;
+
+  /*サガン鳥栖*/
+  background-color: #EC80B4;
+  /*ヴィッセル神戸*/
+  /* background-color: #000000; */
+}
+
+.body-conatiner {
+  width: 100%;
+  height: 700px;
+  text-align: center;
+
+  /*サガン鳥栖*/
+  background-color: #CAE3EC;
+  /*ヴィッセル神戸*/
+  /* background-color: #D9D9D9; */
+}
+
+.refresh-button {
+  border-radius: 5.481px;
+  background-color: #00A0D2;
+  color: white;
+  margin: 15px;
+  font-size: 19px;
+  white-space: nowrap;
+  text-align: center;
+  padding: 4px 20px;
+}
+
+p {
+  text-align: center;
+}
+
 .div {
   background-color: #ebfffe;
   display: flex;
@@ -134,19 +194,7 @@ export default {
   border-radius: 5px;
 }
 
-.div-4 {
-  border-radius: 5.481px;
-  background-color: #2c4e61;
-  display: flex;
-  margin-top: 15px;
-  gap: 1px;
-  font-size: 19px;
-  color: #ebfffe;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  padding: 4px 20px;
-}
+
 
 .img-2 {
   aspect-ratio: 1;
@@ -155,12 +203,7 @@ export default {
   width: 38px;
 }
 
-.div-5 {
-  font-family: Inter, sans-serif;
-  flex-grow: 1;
-  flex-basis: auto;
-  margin: auto 0;
-}
+
 
 .div-6 {
   border-color: rgba(138, 138, 138, 1);
@@ -464,4 +507,5 @@ export default {
     padding: 19px 0px;
     font: 700 14px M PLUS Code Latin, sans-serif;
   }
-}</style>
+}
+</style>
