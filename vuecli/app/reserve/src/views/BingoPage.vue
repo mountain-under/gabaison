@@ -219,7 +219,9 @@ export default {
 }
 
 
+
 .bingo-cell.selected {
+
 
   background-color: rgba(255, 204, 0, 0.6);
   /* 画像の上に選択時の背景色を適用 */
@@ -231,6 +233,7 @@ export default {
   font-size: 24px;
   font-weight: bold;
   color: white;
+
   text-shadow: 2px 2px 4px black; /* 数字の視認性を高めるための影 */
 }
 
@@ -326,4 +329,5 @@ export default {
     opacity: 1;
   }
 }
+
 </style>
