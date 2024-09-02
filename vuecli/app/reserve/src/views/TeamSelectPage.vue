@@ -1,10 +1,17 @@
 <template>
+  <div class="title-conatiner">
+    <div class="upper">応援チーム･推し選手 登録
+    </div>
+    <div class="lower"></div>
+  </div>
   <div>
-    <h1>お気に入りのサッカーチームと選手を選んでください</h1>
+    <div class="ask">
+      <b>あなたの応援チームと推し選手を選んでください</b>
+    </div>
 
     <!-- チーム選択 -->
-    <div>
-      <label for="team">サッカーチームを選ぶ:</label>
+    <div class="select-container">
+      <span>応援チーム</span>
       <div class="dropdown">
         <div class="selected-option" @click="toggleTeamDropdown">
           <img v-if="selectedTeamObject" :src="selectedTeamObject.emblem" :alt="selectedTeam" class="team-emblem" />
@@ -20,11 +27,12 @@
     </div>
 
     <!-- 選手選択 -->
-    <div v-if="players.length > 0">
-      <label for="player">選手を選ぶ:</label>
+    <div v-if="players.length > 0" class="select-container">
+      <label for="player">推し選手</label>
       <div class="dropdown">
         <div class="selected-option" @click="togglePlayerDropdown">
-          <img v-if="selectedPlayerObject" :src="selectedPlayerObject.image" :alt="selectedPlayer" class="player-image" />
+          <img v-if="selectedPlayerObject" :src="selectedPlayerObject.image" :alt="selectedPlayer"
+            class="player-image" />
           {{ selectedPlayer || '選手を選んでください' }}
         </div>
         <ul v-if="showPlayerDropdown" class="options-list">
@@ -39,8 +47,8 @@
     <!-- 選択内容の表示 -->
     <div v-if="selectedTeam && selectedPlayer">
       <h2>選択内容</h2>
-      <p>チーム: {{ selectedTeam }}</p>
-      <p>選手: {{ selectedPlayer }}</p>
+      <p>応援チーム: {{ selectedTeam }}</p>
+      <p>推し選手: {{ selectedPlayer }}</p>
       <p>背番号: {{ selectedPlayerObject.number }}</p>
 
       <!-- 決定ボタン -->
@@ -68,44 +76,44 @@ export default {
       showPlayerDropdown: false,
       uid: '', // FirebaseのユーザーIDを格納
       teams: [
-        { 
-          name: 'サガン鳥栖', 
-          emblem: require('@/assets/sagantosu.webp'), 
+        {
+          name: 'サガン鳥栖',
+          emblem: require('@/assets/sagantosu.webp'),
           players: [
             { number: 1, name: 'アルナウ', image: require('@/assets/01_ARNAU-Riera-Rodriguez_EG-2.jpg'), position: 'GK' },
             { number: 2, name: '山﨑　浩介', image: require('@/assets/02_Kosuke-YAMAZAKI_EG-2.jpg'), position: 'DF' },
-            { number: 3, name: '木村　誠二', image: require('@/assets/03_Seiji-KIMURA_EG-2.jpg'), position: 'DF'  },
-            { number: 4, name: '今津　佑太', image: require('@/assets/今津選手_l.jpg'), position: 'DF'  },
+            { number: 3, name: '木村　誠二', image: require('@/assets/03_Seiji-KIMURA_EG-2.jpg'), position: 'DF' },
+            { number: 4, name: '今津　佑太', image: require('@/assets/今津選手_l.jpg'), position: 'DF' },
             { number: 6, name: "福田 翔斗", image: require('@/assets/06_Akito-FUKUTA_EG-1.jpg'), position: 'MF' },
             { number: 8, name: "中原 輝", image: require('@/assets/08_Hikaru-NAKAHARA_EG-1.jpg'), position: 'MF' },
             { number: 10, name: "本田 風智", image: require('@/assets/10_Fuchi-HONDA_EG.jpg'), position: 'MF' },
             { number: 11, name: "ヴィニシウス アラウージョ", image: require('@/assets/11_Vinicius-Vasconcelos-Araujo_EG-2.jpg'), position: 'FW' },
-            { number: 14, name: "藤田 直之", image: require('@/assets/14_Naoyuki-FUJITA_EG-3.jpg'), position: 'MF'  },
-            { number: 16, name: "上夷 克典", image: require('@/assets/16_Katsunori-UEEBISU_EG-3.jpg'), position: 'DF'  },
-            { number: 18, name: "日野 翔太", image: require('@/assets/18_Shota-HINO_EG-3.jpg'), position: 'MF'  },
-            { number: 19, name: "森谷 賢太郎", image: require('@/assets/19_Kentaro-MORIYA_EG-3.jpg'), position: 'MF'  },
-            { number: 20, name: "キム テヒョン", image: require('@/assets/20_KIM-Tae-Hyeon_EG-2.jpg'), position: 'DF'  },
-            { number: 21, name: "堀米 勇輝", image: require('@/assets/21_Yuki-HORIGOME_EG-3.jpg'), position: 'MF'  },
-            { number: 22, name: "富樫 敬真", image: require('@/assets/22_Cayman-TOGASHI_EG-3.jpg'), position: 'FW'  },
-            { number: 24, name: "久保　藤次郎", image: require('@/assets/24_久保_l.jpg'), position: 'MF'  },
-            { number: 25, name: "渡邉 緑平", image: require('@/assets/25_Ryohei-Watanabe_EG-3.jpg'), position: 'MF'  },
-            { number: 27, name: "椿原 慶樹", image: require('@/assets/27_Yoshiki-NARAHARA_EG-3.jpg'), position: 'MF'  },
-            { number: 28, name: "丸橋 祐介", image: require('@/assets/28_Yusuke-MARUHASHI_EG-3.jpg'), position: 'DF'  },
-            { number: 29, name: "井上　太聖", image: require('@/assets/29_Taisei-INOUE_EG-3.jpg'), position: 'DF'  },
-            { number: 31, name: "岡本 昌弘", image: require('@/assets/31_Masahiro-OKAMOTO_EG-3.jpg'), position: 'GK'  },
-            { number: 32, name: "堺屋 佳介", image: require('@/assets/32_Keisuke-SAKAIYA_EG-3.jpg'), position: 'FW'  },
-            { number: 33, name: "西矢　健人", image: require('@/assets/33_Kento-NISHIYA_EG.jpg'), position: 'MF'  },
-            { number: 36, name: "北島 郁哉", image: require('@/assets/36_Fumiya-KITAJIMA_EG-3.jpg'), position: 'DF'  },
-            { number: 37, name: "寺山　翼", image: require('@/assets/寺山選手_l.jpg'), position: 'MF'  },
-            { number: 42, name: "原田 昌", image: require('@/assets/42_Wataru-HARADA_EG-3.jpg'), position: 'DF'  },
-            { number: 46, name: "エジケ 唯吹ヴィンセントジュニア", image: require('@/assets/NO-IMAGE-3.jpg'), position: 'GK'  },
-            { number: 47, name: "鈴木　大馳", image: require('@/assets/47_Daichi-SUZUKI_EG-3.jpg'), position: 'FW'  },
-            { number: 51, name: "イ ユンスン", image: require('@/assets/51_LEE-Yoonsung_EG-3.jpg'), position: 'GK'  },
-            { number: 55, name: "清武　弘嗣", image: require('@/assets/55_Hiroshi-KIYOTAKE_EG.jpg'), position: 'MF'  },
-            { number: 70, name: "ジャジャ　シルバ", image: require('@/assets/JAJASILVA_EG.jpg'), position: 'MF'  },
-            { number: 71, name: "朴 一圭", image: require('@/assets/71_IlGyu-PARK_EG-3.jpg'), position: 'GK'  },
-            { number: 77, name: "ヴィキンタス　スリヴカ", image: require('@/assets/77_VYKINTAS-SLIVKA_EG-1.jpg'), position: 'MF'  },
-            { number: 99, name: "マルセロ ピアン", image: require('@/assets/99_MARCELO-RYAN-Silvestre-Dos-Santos_EG-3.jpg'), position: 'FW'  }
+            { number: 14, name: "藤田 直之", image: require('@/assets/14_Naoyuki-FUJITA_EG-3.jpg'), position: 'MF' },
+            { number: 16, name: "上夷 克典", image: require('@/assets/16_Katsunori-UEEBISU_EG-3.jpg'), position: 'DF' },
+            { number: 18, name: "日野 翔太", image: require('@/assets/18_Shota-HINO_EG-3.jpg'), position: 'MF' },
+            { number: 19, name: "森谷 賢太郎", image: require('@/assets/19_Kentaro-MORIYA_EG-3.jpg'), position: 'MF' },
+            { number: 20, name: "キム テヒョン", image: require('@/assets/20_KIM-Tae-Hyeon_EG-2.jpg'), position: 'DF' },
+            { number: 21, name: "堀米 勇輝", image: require('@/assets/21_Yuki-HORIGOME_EG-3.jpg'), position: 'MF' },
+            { number: 22, name: "富樫 敬真", image: require('@/assets/22_Cayman-TOGASHI_EG-3.jpg'), position: 'FW' },
+            { number: 24, name: "久保　藤次郎", image: require('@/assets/24_久保_l.jpg'), position: 'MF' },
+            { number: 25, name: "渡邉 緑平", image: require('@/assets/25_Ryohei-Watanabe_EG-3.jpg'), position: 'MF' },
+            { number: 27, name: "椿原 慶樹", image: require('@/assets/27_Yoshiki-NARAHARA_EG-3.jpg'), position: 'MF' },
+            { number: 28, name: "丸橋 祐介", image: require('@/assets/28_Yusuke-MARUHASHI_EG-3.jpg'), position: 'DF' },
+            { number: 29, name: "井上　太聖", image: require('@/assets/29_Taisei-INOUE_EG-3.jpg'), position: 'DF' },
+            { number: 31, name: "岡本 昌弘", image: require('@/assets/31_Masahiro-OKAMOTO_EG-3.jpg'), position: 'GK' },
+            { number: 32, name: "堺屋 佳介", image: require('@/assets/32_Keisuke-SAKAIYA_EG-3.jpg'), position: 'FW' },
+            { number: 33, name: "西矢　健人", image: require('@/assets/33_Kento-NISHIYA_EG.jpg'), position: 'MF' },
+            { number: 36, name: "北島 郁哉", image: require('@/assets/36_Fumiya-KITAJIMA_EG-3.jpg'), position: 'DF' },
+            { number: 37, name: "寺山　翼", image: require('@/assets/寺山選手_l.jpg'), position: 'MF' },
+            { number: 42, name: "原田 昌", image: require('@/assets/42_Wataru-HARADA_EG-3.jpg'), position: 'DF' },
+            { number: 46, name: "エジケ 唯吹ヴィンセントジュニア", image: require('@/assets/NO-IMAGE-3.jpg'), position: 'GK' },
+            { number: 47, name: "鈴木　大馳", image: require('@/assets/47_Daichi-SUZUKI_EG-3.jpg'), position: 'FW' },
+            { number: 51, name: "イ ユンスン", image: require('@/assets/51_LEE-Yoonsung_EG-3.jpg'), position: 'GK' },
+            { number: 55, name: "清武　弘嗣", image: require('@/assets/55_Hiroshi-KIYOTAKE_EG.jpg'), position: 'MF' },
+            { number: 70, name: "ジャジャ　シルバ", image: require('@/assets/JAJASILVA_EG.jpg'), position: 'MF' },
+            { number: 71, name: "朴 一圭", image: require('@/assets/71_IlGyu-PARK_EG-3.jpg'), position: 'GK' },
+            { number: 77, name: "ヴィキンタス　スリヴカ", image: require('@/assets/77_VYKINTAS-SLIVKA_EG-1.jpg'), position: 'MF' },
+            { number: 99, name: "マルセロ ピアン", image: require('@/assets/99_MARCELO-RYAN-Silvestre-Dos-Santos_EG-3.jpg'), position: 'FW' }
 
           ],
         },
@@ -155,9 +163,9 @@ export default {
       try {
         await setDoc(userDocRef, {
           team: this.selectedTeam,
-          
+
           number: this.selectedPlayerObject.number
-        }, {merge: true });
+        }, { merge: true });
 
         console.log('Selection saved successfully.');
         alert('選択が保存されました！');
@@ -170,6 +178,58 @@ export default {
 </script>
 
 <style scoped>
+.title-conatiner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.upper {
+  width: 100%;
+
+  /*サガン鳥栖*/
+  background-color: #00A0D2;
+  color: white;
+  /*ヴィッセル神戸*/
+  /* background-color: #FFFFFF; */
+  /* color: #A40931; */
+
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.lower {
+  width: 100%;
+  height: 20px;
+
+  /*サガン鳥栖*/
+  background-color: #EC80B4;
+  /*ヴィッセル神戸*/
+  /* background-color: #000000; */
+}
+
+.body-conatiner {
+  width: 100%;
+  height: 600px;
+  flex-grow: 1;
+
+  /*サガン鳥栖*/
+  background-color: #CAE3EC;
+  /*ヴィッセル神戸*/
+  /* background-color: #D9D9D9; */
+}
+
+.ask {
+  margin: 10px 0;
+}
+
+.select-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -177,6 +237,7 @@ export default {
 
 .selected-option {
   padding: 8px;
+  margin: 10px;
   border: 1px solid #ccc;
   cursor: pointer;
   display: flex;
@@ -205,7 +266,8 @@ export default {
   background-color: #eee;
 }
 
-.team-emblem, .player-image {
+.team-emblem,
+.player-image {
   width: 30px;
   height: 30px;
   margin-right: 10px;
