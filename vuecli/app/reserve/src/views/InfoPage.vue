@@ -1,36 +1,26 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="div">
-    <div class="div-2">予約完了</div>
-    <div class="div-3">
-      予約が完了しました。<br />QRコードを保存してください。<br />
-      当日ご提示をお願い致します。<br /><br />
-     
-    </div>
+    <div class="div-2">ユーザ情報</div>
 
     <div ref="qrCodeContainer">
       <img
         :src="url"
-        :alt="reserveId"
+        :alt="uid"
         class="img"
       />
     </div>
     <button class="div-4" @click="saveQrCode">
-      <div class="div-5">QRコードを保存</div>
+      <div class="div-5">更新</div>
     </button>
-    <div class="div-3">
-      登録内容について必ず確認お願いします。<br />登録内容に誤りがある場合や不正が確認された場合は予約を取り消す場合があります。
-    </div>
-    <div class="div-7">
-      <div class="div-8">予約内容</div>
-      <div class="div-9">※予約確認メールにお送りしています。</div>
-    </div>
+   
+
     <div class="div-10">
 
       <p v-if="reservation">
         予約日 ：{{ this.reservation["date"] ?? 0}} {{ this.reservation["time"] ?? 0 }}<br>
         同伴人数： {{ this.reservation["customer_num"] ?? 0 }}人<br>
-        名前  ： {{ this.reservation["name"] ?? 1 }}<br>
+        名前  ： {{ this.reservation["reserveId"] ?? 1 }}<br>
         電話番号： {{ this.reservation["tel"] ?? 0 }}<br>
         Email ： {{ this.reservation["email"] ?? 0 }}<br>
         居住地 ： {{ this.reservation["hometown"] ?? 0 }}<br>
@@ -42,49 +32,61 @@
 </template>
 
 <script>
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
+import { onAuthStateChanged } from "firebase/auth";
+import Firebase from "../firebase/firebase";
+//import { getFirestore } from 'firebase/firestore';
+
+const auth = Firebase.auth
+
+//const db = getFirestore()
 
 export default {
-  props: {
-    reserveId: String,
-  },
   data() {
     return {
-      url: '',
-      childrenCount: 0,
-      reservation: null,
+      uid: '',
     };
   },
   async created() {
-    this.url = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.reserveId)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=0&ecc=L&size=213x213`;
+    //ユーザ情報取得
+    await onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.uid = user.uid;
+        this.url = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(user.uid)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=0&ecc=L&size=213x213`;
+        console.log(this.url)
+      } else {
+        console.log('User is not logged in.');
+      }
+    });
+
+
+    
     
   
-    try {
+    // try {
 
-      
-   
-        const response = await fetch('https://sunapp.jp/sunappForReserve/api/getReservationById.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ reserveid: this.reserveId })
-        });
+    //     const response = await fetch('https://sunapp.jp/sunappForReserve/api/getReservationById.php', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({ reserveid: this.reserveId })
+    //     });
 
-        const data = await response.json();
-        this.reservation = data.reservation;
+    //     const data = await response.json();
+    //     this.reservation = data.reservation;
        
-        if (data.status === 'success') {
-          this.reservation = data.reservation;
-          console.log(this.reservation)
-        } else {
-          console.error('エラーが発生しました: ', data.message);
-          alert(data.message);
-        }
-      } catch (error) {
-        console.error('エラーが発生しました: ', error);
-        alert('予約情報の取得に失敗しました。');
-      }
+    //     if (data.status === 'success') {
+    //       this.reservation = data.reservation;
+    //       console.log(this.reservation)
+    //     } else {
+    //       console.error('エラーが発生しました: ', data.message);
+    //       alert(data.message);
+    //     }
+    //   } catch (error) {
+    //     console.error('エラーが発生しました: ', error);
+    //     alert('予約情報の取得に失敗しました。');
+    //   }
 
   },
   computed: {
@@ -94,13 +96,13 @@ export default {
   },
   methods: {
     async saveQrCode() {
-      try {
-        const response = await fetch(this.url);
-        const blob = await response.blob();
-        saveAs(blob, 'qrcode.png');
-      } catch (error) {
-        console.error('Error saving QR code:', error);
-      }
+      // try {
+      //   const response = await fetch(this.url);
+      //   const blob = await response.blob();
+      //   saveAs(blob, 'qrcode.png');
+      // } catch (error) {
+      //   console.error('Error saving QR code:', error);
+      // }
     },
   },
 };
