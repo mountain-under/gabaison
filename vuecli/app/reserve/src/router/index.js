@@ -97,12 +97,13 @@ const routes = [
     meta: { title: 'bingo', requiresAuth: false}
 
   },
-    {
-        path: '/teamselect',
-        name: 'TeamSelect',
-        component: TeamSelectPage,
-        meta: { title: 'チーム選択', requiresAuth: false}
-     }
+  {
+    path: '/teamselect',
+    name: 'TeamSelect',
+    component: TeamSelectPage,
+    meta: { title: 'チーム選択', requiresAuth: false}
+  }
+
 ]
 
 

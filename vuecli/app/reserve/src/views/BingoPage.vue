@@ -1,16 +1,38 @@
 <template>
-  <div id="app" :class="teamClass">
+  <div id="app">
     <h1>ビンゴゲーム</h1>
     <div class="bingo-grid">
-      <div v-for="(cell, index) in bingoCells" :key="index" :class="['bingo-cell']" @click="selectNumber(index, cell)"
-        :style="{ backgroundImage: `url(${getImageForType(cell.type)})` }">
+      <div
+        v-for="(cell, index) in bingoCells"
+        :key="index"
+        :class="['bingo-cell']"
+        @click="selectNumber(index, cell)"
+        :style="{ backgroundImage: `url(${getImageForType(cell.type)})` }"
+      >
         <span class="cell-number">{{ cell.number }}</span>
+      </div>
+    </div>
+    <h2>試合結果予想</h2>
+    <div class="match-info">
+      <div class="team">
+        <img :src="teamALogo" alt="Team A Logo" class="team-logo" />
+        <p>{{ teamAName }}</p>
+      </div>
+      <div class="score-input">
+        <input v-model="teamAScore" type="number" placeholder="点数を予想" />
+        <span> - </span>
+        <input v-model="teamBScore" type="number" placeholder="点数を予想" />
+      </div>
+      <div class="team">
+        <img :src="teamBLogo" alt="Team B Logo" class="team-logo" />
+        <p>{{ teamBName }}</p>
       </div>
     </div>
 
     <div v-if="showPopup" class="popup-overlay" @click="closePopup">
       <div class="popup">
         <p>番号 {{ selectedNumber.number }} が選択されました！</p>
+        <p>名前 {{ selectedNumber.name }} が選択されました！</p>
         <p>タイプ {{ selectedNumber.type }} が選択されました！</p>
         <button @click="closePopup">OK</button>
       </div>
@@ -19,24 +41,58 @@
 </template>
 
 <script>
+import { saganTosuPlayers } from '@/testData/saganTosuPlayers.js'; // テストデータのインポート
+import { onAuthStateChanged } from "firebase/auth";
+import Firebase from "../firebase/firebase";
+import { getFirestore, getDoc, doc } from 'firebase/firestore';
+ 
+const auth = Firebase.auth
+ 
+const db = getFirestore()
+
+
 export default {
   data() {
     return {
       bingoCells: this.generateBingoCells(),
       showPopup: false,
       selectedNumber: null,
-      team: 'ヴィッセル神戸',
+      teamAScore: '',
+      teamBScore: '',
+      uid: '',
+      number: 0,
+      userData: '',
+      team: '',
     };
+  },
+  async created() {
+    //ユーザ情報取得
+    await onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.uid = user.uid;
+      } else {
+        console.log('User is not logged in.');
+      }
+    });
+ 
+    await this.getUserData()
+ 
   },
   methods: {
     generateBingoCells() {
-      const numbers = Array.from({ length: 25 }, (_, i) => i + 1);
-      const shuffledNumbers = this.shuffleArray(numbers);
-      const types = [1, 2, 3];
-      return shuffledNumbers.map(number => ({
-        number,
-        type: types[Math.floor(Math.random() * types.length)]
+      const selectedPlayers = this.getRandomPlayers(24); // 中央のセル以外のプレイヤー番号を選択
+      // プレイヤー番号とタイプを使ってビンゴのセルを作成
+      const bingoCells = selectedPlayers.map(player => ({
+        number: player.number,
+        name: player.name,
+        type: Math.floor(Math.random() * 3) + 1 // タイプは 1 から 3 のいずれか
       }));
+      
+      // 中央のセルにデータベースから取得したnumberを設定
+      const centerIndex = 12; // ビンゴの中央のセルのインデックス
+      bingoCells.splice(centerIndex, 0, { number: this.number, name: 'Central', type: 0 });
+      
+      return bingoCells;
     },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -44,6 +100,10 @@ export default {
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
+    },
+    getRandomPlayers(count) {
+      const shuffled = this.shuffleArray(saganTosuPlayers); // シャッフルして
+      return shuffled.slice(0, count); // 指定した数だけ選択
     },
     selectNumber(index, cell) {
       this.selectedNumber = cell;
@@ -53,6 +113,7 @@ export default {
       this.showPopup = false;
     },
     getImageForType(type) {
+
       // タイプに応じた画像パスを返す
       switch (type) {
         case 1:
@@ -65,7 +126,18 @@ export default {
           return '';
       }
     },
-
+    async getUserData() {
+      try {
+        const querySnapshot = await getDoc(doc(db, 'user', this.uid));
+        this.userData = querySnapshot.data()
+        console.log(this.userData)
+        this.number = this.userData["number"]
+        console.log(this.number)
+        this.team = this.userData["team"]
+      } catch (error) {
+        console.error('Error fetching TA and Technical Assistant data: ', error);
+      }
+    },
   },
   computed: {
     teamClass() {
@@ -111,7 +183,6 @@ export default {
   background-image: url('/app/reserve/src/assets/sagantosu.webp');
 }
 
-
 .bingo-grid {
   display: grid;
   grid-template-columns: repeat(5, 60px);
@@ -134,19 +205,22 @@ export default {
   font-weight: bold;
   position: relative;
   transition: background-color 0.3s, transform 0.3s;
+  color: white; /* 数字の色を白に設定 */
+  text-shadow: 1px 1px 2px black; /* 数字の視認性を高めるための影 */
+}
+
+.bingo-cell:hover {
+  background-color: rgba(0, 0, 0, 0.2); /* 画像の上にホバー効果を適用 */
+  transform: scale(1.1);
   color: white;
   /* 数字の色を白に設定 */
   text-shadow: 1px 1px 2px black;
   /* 数字の視認性を高めるための影 */
 }
 
-.bingo-cell:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  /* 画像の上にホバー効果を適用 */
-  transform: scale(1.1);
-}
 
 .bingo-cell.selected {
+
   background-color: rgba(255, 204, 0, 0.6);
   /* 画像の上に選択時の背景色を適用 */
   border-color: #ff9900;
@@ -157,6 +231,43 @@ export default {
   font-size: 24px;
   font-weight: bold;
   color: white;
+  text-shadow: 2px 2px 4px black; /* 数字の視認性を高めるための影 */
+}
+
+.match-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.team-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.score-input {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.score-input input {
+  width: 50px;
+  padding: 5px;
+  font-size: 18px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
   text-shadow: 2px 2px 4px black;
   /* 数字の視認性を高めるための影 */
 }
@@ -214,4 +325,5 @@ export default {
     transform: scale(1);
     opacity: 1;
   }
-}</style>
+}
+</style>
