@@ -11,6 +11,7 @@ import BingoPage from "../views/BingoPage.vue";
 import CouponePage from "../views/couponPage.vue";
 import TeamSelectPage from "../views/TeamSelectPage.vue";
 import BasePage from "../views/basePage.vue";
+import CouponList from "../views/couponListPage.vue";
 import MainLayout from "@/layouts/MainLayout.vue";
 
 const routes = [
@@ -73,6 +74,12 @@ const routes = [
         name: "TeamSelect",
         component: TeamSelectPage,
         meta: { title: "チーム選択", requiresAuth: false },
+      },
+      {
+        path: "/couponlist",
+        name: "CouponList",
+        component: CouponList,
+        meta: { title: "クーポン一覧", requiresAuth: false },
       },
     ],
   },
