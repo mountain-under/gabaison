@@ -253,6 +253,9 @@ span.points-label {
   border-radius: 10px; /* 角を少し丸める */
   text-align: center; /* テキストを中央揃えにする */
   margin: 0px 0px; /* 上下にマージンを追加 */
+  margin: 0 auto; /* 水平方向に中央揃えに設定 */
+  /*width: 80%; /* 幅を80%に設定（例） */
+  max-width: 300px; /* 最大幅を300pxに制限 */
 }
 
 p.expiry {
