@@ -11,20 +11,21 @@ import QRCodePage from '../views/QRcodePage.vue'
 import infoPage from '../views/InfoPage.vue'
 import listPage from '../views/listPage.vue'
 import LoginView from '../views/LoginPage.vue'
+import BingoPage from '../views/BingoPage.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: HelloPage,
-    meta: { title: 'Home', requiresAuth: true}
+    meta: { title: 'Home', requiresAuth: false}
 
   },
   {
     path: '/qrcode',
     name: 'qrcodeReader',
     component: QRCodePage,
-    meta: { title: 'QRCodeReader', requiresAuth: true}
+    meta: { title: 'QRCodeReader', requiresAuth: false}
 
   },
   {
@@ -32,9 +33,9 @@ const routes = [
     name: 'deletePage',
     component: deletePage,
     props: true, 
-    meta: { title: '予約削除', requiresAuth: true}
+    meta: { title: '予約削除', requiresAuth: false}
   },
-  {
+  
     path: '/Info',
     name: 'infoPage',
     component: infoPage,
@@ -45,7 +46,7 @@ const routes = [
     path: '/list',
     name: 'list',
     component: listPage,
-    meta: { title: '予約者リスト', requiresAuth: true}
+    meta: { title: '予約者リスト', requiresAuth: false}
 
   },
   {
@@ -53,7 +54,14 @@ const routes = [
     name: 'login',
     component: LoginView,
     meta: { title: 'Login', requiresAuth: false}
-},
+  },
+  {
+    path: '/bingo',
+    name: 'bingo',
+    component: BingoPage,
+    meta: { title: 'bingo', requiresAuth: false}
+
+  },
 ]
 
 const router = createRouter({
