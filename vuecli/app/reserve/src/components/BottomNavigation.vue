@@ -19,7 +19,7 @@
       </router-link>
     </div>
     <div class="nav-item">
-      <router-link to="/team-data" class="nav-link">
+      <router-link to="/playergallery" class="nav-link">
         <img src="@/assets/icons/team-data-icon.png" alt="チームデータ" />
         <span>チームデータ</span>
       </router-link>
