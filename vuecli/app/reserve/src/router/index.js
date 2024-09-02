@@ -21,7 +21,7 @@ const routes = [
     children: [
       {
         path: "/",
-        name: "",
+        name: "Home",
         component: HomePage,
         meta: { title: "home", requiresAuth: true },
       },
