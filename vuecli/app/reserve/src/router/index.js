@@ -8,7 +8,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import HelloPage from '../views/consoleHomePage.vue'
 import deletePage from '../views/deletePage.vue'
 import QRCodePage from '../views/QRcodePage.vue'
-import checkInOutPage from '../views/checkInOutPage.vue'
+import infoPage from '../views/InfoPage.vue'
 import listPage from '../views/listPage.vue'
 import LoginView from '../views/LoginPage.vue'
 
@@ -35,10 +35,9 @@ const routes = [
     meta: { title: '予約削除', requiresAuth: true}
   },
   {
-    path: '/checkInOutPage/:reserveId',
-    name: 'checkInOutPage',
-    component: checkInOutPage,
-    props: true, 
+    path: '/Info',
+    name: 'infoPage',
+    component: infoPage,
     meta: { title: 'チェックイン/アウト', requiresAuth: true}
   },
 
@@ -69,7 +68,7 @@ const router = createRouter({
 
 
 router.afterEach((titleString) => {
-  document.title = titleString.meta.title + ' | reserve'
+  document.title = titleString.meta.title + ' | '
 });
 
 // 画面遷移前にログイン済みかをチェックして、未ログイン時はログイン画面に強制遷移させる

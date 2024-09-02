@@ -4,14 +4,21 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC8lW6148uBSbC5_U7UZTk_KVt0E4akYM0",
-  authDomain: "karatsu-waterpark.firebaseapp.com",
-  projectId: "karatsu-waterpark",
-  storageBucket: "karatsu-waterpark.appspot.com",
-  messagingSenderId: "109223703797",
-  appId: "1:109223703797:web:778d33f7c105ad987681bc",
-  measurementId: "G-8MQSQKR3YG"
+ 
+  apiKey: "AIzaSyBGg9ott0si4ZcfAzSvwULbgoHq4lsL60Y",
+ 
+  authDomain: "gabaison.firebaseapp.com",
+ 
+  projectId: "gabaison",
+ 
+  storageBucket: "gabaison.appspot.com",
+ 
+  messagingSenderId: "699202983308",
+ 
+  appId: "1:699202983308:web:cff774f3d95d6d34e232a9"
+ 
 };
+ 
 
 
   // firebaseConfigの値を元にfirebaseの初期化
