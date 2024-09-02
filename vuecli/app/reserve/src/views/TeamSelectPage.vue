@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
@@ -156,6 +156,7 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.uid = user.uid;
+        this.loadSelection();
         console.log(this.uid);
       } else {
         console.log('User is not logged in.');
@@ -163,6 +164,30 @@ export default {
     });
   },
   methods: {
+    async loadSelection() {
+      const userDocRef = doc(db, 'user', this.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        this.selectedTeam = data.team;
+        const selectedNumber = data.number;
+
+        // チームの選択状態を復元
+        const team = this.teams.find(t => t.name === this.selectedTeam);
+        if (team) {
+          this.selectTeam(team);
+
+          // 選手の選択状態を復元
+          const player = team.players.find(p => p.number === selectedNumber);
+          if (player) {
+            this.selectPlayer(player);
+          }
+        }
+      } else {
+        console.log('No previous selection found.');
+      }
+    },
     toggleTeamDropdown() {
       this.showTeamDropdown = !this.showTeamDropdown;
     },
