@@ -2,10 +2,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import HomePage from "../views/HomePage.vue";
-import deletePage from "../views/deletePage.vue";
 import QRCodePage from "../views/QRcodePage.vue";
 import infoPage from "../views/InfoPage.vue";
-import listPage from "../views/listPage.vue";
 import LoginView from "../views/LoginPage.vue";
 import BingoPage from "../views/BingoPage.vue";
 import CouponePage from "../views/couponPage.vue";
@@ -24,13 +22,13 @@ const routes = [
         path: "/",
         name: "",
         component: HomePage,
-        meta: { title: "home", requiresAuth: false },
+        meta: { title: "home", requiresAuth: true },
       },
       {
         path: "/base",
         name: "Base",
         component: BasePage,
-        meta: { title: "Base", requiresAuth: false },
+        meta: { title: "Base", requiresAuth: true },
       },
       {
         path: "qrcode",
@@ -43,45 +41,31 @@ const routes = [
         name: "coupon",
         component: CouponePage,
         props: true,
-        meta: { title: "CouponePage", requiresAuth: false },
+        meta: { title: "CouponePage", requiresAuth: true },
       },
-      {
-        path: "deletePage/:reserveId",
-        name: "deletePage",
-        component: deletePage,
-        props: true,
-        meta: { title: "予約削除", requiresAuth: true },
-      },
-
       {
         path: "/Info",
         name: "infoPage",
         component: infoPage,
-        meta: { title: "チェックイン/アウト", requiresAuth: true },
-      },
-      {
-        path: "/list",
-        name: "list",
-        component: listPage,
-        meta: { title: "予約者リスト", requiresAuth: false },
+        meta: { title: "ユーザ情報", requiresAuth: true },
       },
       {
         path: "/bingo",
         name: "bingo",
         component: BingoPage,
-        meta: { title: "bingo", requiresAuth: false },
+        meta: { title: "bingo", requiresAuth: true },
       },
       {
         path: "/teamselect",
         name: "TeamSelect",
         component: TeamSelectPage,
-        meta: { title: "チーム選択", requiresAuth: false },
+        meta: { title: "チーム選択", requiresAuth: true },
       },
       {
         path: "/couponlist",
         name: "CouponList",
         component: CouponList,
-        meta: { title: "クーポン一覧", requiresAuth: false },
+        meta: { title: "クーポン一覧", requiresAuth: true },
       },
     ],
   },

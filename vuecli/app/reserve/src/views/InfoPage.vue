@@ -19,7 +19,6 @@
 
       </p>
     </div>
-    <div class="div-11"> supported by <a href="https://sunapp.jp" class="sunapp">sunapp</a> LLC.</div>
   </div>
 </template>
 
