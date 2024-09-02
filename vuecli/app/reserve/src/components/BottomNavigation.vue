@@ -6,11 +6,16 @@
         <span>ホーム</span>
       </router-link>
     </div>
-
     <div class="nav-item">
       <router-link to="/user-info" class="nav-link">
         <img src="@/assets/icons/user-info-icon.png" alt="ユーザ情報" />
         <span>ユーザ情報</span>
+      </router-link>
+    </div>
+    <div class="nav-item">
+      <router-link to="/couponlist" class="nav-link">
+        <img src="@/assets/icons/coupon-icon.png" alt="クーポン" />
+        <span>クーポン</span>
       </router-link>
     </div>
     <div class="nav-item">
@@ -50,7 +55,7 @@ export default {
 .nav-item {
   width: 25%;
   text-align: center;
-  font-size: 11pt;
+  font-size: 9.5pt;
   display: inline
 }
 
