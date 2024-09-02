@@ -39,9 +39,10 @@ const routes = [
         meta: { title: "QRCodeReader", requiresAuth: true },
       },
       {
-        path: "/coupon",
+        path: "/coupon:couponId",
         name: "coupon",
         component: CouponePage,
+        props: true,
         meta: { title: "CouponePage", requiresAuth: false },
       },
       {
