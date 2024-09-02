@@ -12,38 +12,159 @@
       <div id="qr-reader-results" class="results"></div>
       <div id="qr-reader-error" class="error"></div>
 
-      <div class="manual-input">
-        <input type="text" v-model="manualReserveId" placeholder="予約IDでチェックイン" class="input-field"/>
-        <button @click="submitManualReserveId" class="submit-button">次へ</button>
-      </div>
     </div>
-    <div class="div-11">supported by <a href="https://sunapp.jp" class="sunapp">sunapp</a> LLC.</div>
   </div>
+
+  <div v-if="bingoAchieved" class="bingo-modal">
+  ビンゴ達成！<br>おめでとうございます！
+</div>
+
+<div v-if="holeAchieved" class="bingo-modal">
+  穴が開きました！<br>おめでとうございます！
+</div>
 </template>
 
 <script>
 import { Html5Qrcode } from "html5-qrcode";
+import { onAuthStateChanged } from "firebase/auth";
+import Firebase from "../firebase/firebase";
+import { getFirestore, getDoc, doc } from 'firebase/firestore';
+ 
+const auth = Firebase.auth
+ 
+const db = getFirestore()
 
 export default {
   name: 'QrCodeScanner',
   data() {
     return {
-      html5QrCode: null
+      html5QrCode: null,
+      userData: null,
+      uid: '',
+      board: [],
+      bingoAchieved: false,
+      holeAchieved: false,
     };
+  },
+  async created() {
+    //ユーザ情報取得
+    await onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.uid = user.uid;
+      } else {
+        console.log('User is not logged in.');
+      }
+    });
+ 
+    await this.getUserData()
   },
   mounted() {
     this.startScanner();
   },
 
   methods: {
+    checkBingo(board) {
+  const size = board.length;
+
+  // 横のラインチェック
+  for (let i = 0; i < size; i++) {
+    if (board[i].every(cell => cell.marked)) {
+      return true;
+    }
+  }
+
+  // 縦のラインチェック
+  for (let j = 0; j < size; j++) {
+    let allMarked = true;
+    for (let i = 0; i < size; i++) {
+      if (!board[i][j].marked) {
+        allMarked = false;
+        break;
+      }
+    }
+    if (allMarked) {
+      return true;
+    }
+  }
+
+  // 左上から右下の斜めラインチェック
+  let diagonal1 = true;
+  for (let i = 0; i < size; i++) {
+    if (!board[i][i].marked) {
+      diagonal1 = false;
+      break;
+    }
+  }
+  if (diagonal1) {
+    return true;
+  }
+
+  // 右上から左下の斜めラインチェック
+  let diagonal2 = true;
+  for (let i = 0; i < size; i++) {
+    if (!board[i][size - 1 - i].marked) {
+      diagonal2 = false;
+      break;
+    }
+  }
+  if (diagonal2) {
+    return true;
+  }
+
+  // ビンゴが成立していない
+  return false;
+},
+
+ markNumber(board, number, type) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (board[i][j].number === number && board[i][j].type === type && board[i][j].marked === false) {
+        board[i][j].marked = true;
+        if (this.checkBingo(board)) {
+          console.log('Bingo!');
+          this.bingoAchieved = true;
+          return true;
+        } else {
+          console.log('Not yet.');
+          this.holeAchieved = true;
+          return false;
+        }
+        
+      }
+    }
+  }
+},
+
+// 使用例
+//markNumber(bingoBoard, 7);  // この番号をマークしてビンゴチェック
+
+
+    async getUserData() {
+      try {
+        const querySnapshot = await getDoc(doc(db, 'user', this.uid));
+        this.userData = querySnapshot.data()
+        this.board = this.userData["bingo"]
+        console.log(this.board)
+
+      } catch (error) {
+        console.error('Error fetching TA and Technical Assistant data: ', error);
+      }
+    },
     startScanner() {
       this.html5QrCode = new Html5Qrcode("qr-reader");
       const qrCodeSuccessCallback = (decodedText) => {
         this.html5QrCode.stop().then(() => {
+          const values = decodedText.split(';');
+    
+    // 分割された値を取り出す
           this.$router.push({
             name: 'checkInOutPage',
+
+
             params: {
-              reserveId: decodedText,
+              uid:  values[0],
+              number:  values[1],
+              team:  values[2],
             }
           });  // QRコード読み取り成功後に次のページに遷移
         }).catch((err) => {
@@ -67,18 +188,6 @@ export default {
         .catch(err => {
           console.log(`Error: ${err.message}`);
         });
-    },
-    submitManualReserveId() {
-      if (this.manualReserveId.trim() !== '') {
-        this.$router.push({
-          name: 'checkInOutPage',
-          params: {
-            reserveId: this.manualReserveId,
-          }
-        });
-      } else {
-        alert('予約IDを入力してください。');
-      }
     },
     goToHomePage(){
       this.$router.push({name: "Home"});
@@ -197,6 +306,22 @@ export default {
 .sunapp {
   color: #ebfffe;
 }
+
+.bingo-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  z-index: 1000;
+}
+
 .div-11 {
   background-color: #2c4e61;
   align-self: stretch;
