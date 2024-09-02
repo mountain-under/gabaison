@@ -1,5 +1,5 @@
 <template>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="container">
     <header class="header">
       <h4>ウォーターパークからつ<br>予約サイト</h4>
@@ -70,127 +70,127 @@
     <footer class="footer">
       supported by <a href="https://sunapp.jp" class="sunapp">sunapp</a> LLC.
     </footer>
-  </div>
+  </div> -->
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      selectedDate: null,
-      selectedTime: null,
-      childrenCount: null, // Default to 1 child
-      event_id: 'Uxn6sTM3Tw',
-      reservations: {},
-      maxReservation: 0,
-      today: new Date()
-    };
-  },
-  mounted() {
+// export default {
+//   data() {
+//     return {
+//       selectedDate: null,
+//       selectedTime: null,
+//       childrenCount: null, // Default to 1 child
+//       event_id: 'Uxn6sTM3Tw',
+//       reservations: {},
+//       maxReservation: 0,
+//       today: new Date()
+//     };
+//   },
+//   mounted() {
 
 
-  },
-  async created(){
-    try {
-      const response = await fetch("https://sunapp.jp/sunappForReserve/api/getReserveCount.php");
-      const data = await response.json();
-      if (data.status === "success") {
-        console.log(data.data)
-        this.reservations = data.data;
-      } else {
-        console.error("エラーが発生しました: ", data.message);
-      }
-    } catch (error) {
-      console.error("エラーが発生しました: ", error);
-    }
+//   },
+//   async created(){
+//     try {
+//       const response = await fetch("https://sunapp.jp/sunappForReserve/api/getReserveCount.php");
+//       const data = await response.json();
+//       if (data.status === "success") {
+//         console.log(data.data)
+//         this.reservations = data.data;
+//       } else {
+//         console.error("エラーが発生しました: ", data.message);
+//       }
+//     } catch (error) {
+//       console.error("エラーが発生しました: ", error);
+//     }
 
-    try {
-      const response2 = await fetch("https://sunapp.jp/sunappForReserve/api/getMaxReservation.php");
-      const data2 = await response2.json();
-      if (data2.status === "success") {
+//     try {
+//       const response2 = await fetch("https://sunapp.jp/sunappForReserve/api/getMaxReservation.php");
+//       const data2 = await response2.json();
+//       if (data2.status === "success") {
         
-       this.maxReservation = parseInt(data2.max_reservation, 10);
-        console.log(this.maxReservation)
-      } else {
-        console.error("エラーが発生しました: ", data2.message);
-      }
-    } catch (error) {
-      console.error("エラーが発生しました: ", error);
-    }
+//        this.maxReservation = parseInt(data2.max_reservation, 10);
+//         console.log(this.maxReservation)
+//       } else {
+//         console.error("エラーが発生しました: ", data2.message);
+//       }
+//     } catch (error) {
+//       console.error("エラーが発生しました: ", error);
+//     }
 
-  },
-  computed: {
-    isBeforeJuly20At10() {
-      const july20At10 = new Date(this.today.getFullYear(), 6, 20, 10); // 7月20日10時
-      console.log(july20At10)
-      return this.today < july20At10;
-    }
-  },
+//   },
+//   computed: {
+//     isBeforeJuly20At10() {
+//       const july20At10 = new Date(this.today.getFullYear(), 6, 20, 10); // 7月20日10時
+//       console.log(july20At10)
+//       return this.today < july20At10;
+//     }
+//   },
 
-  watch: {
-    childrenCount(newCount, oldCount) {
-      if (newCount !== oldCount) {
+//   watch: {
+//     childrenCount(newCount, oldCount) {
+//       if (newCount !== oldCount) {
       
-        this.selectedTime = null; // Reset the selected time as well
-      }
-    },
-    selectedDate(newCount, oldCount) {
-      if (newCount !== oldCount) {
-        this.selectedTime = null; // Reset the selected time as well
-      }
-    }
-  },
-  methods: {
-    selectDate(date) {
-      console.log("Selected date:", date);
-      this.selectedDate = date;
-    },
-    selectTime(time) {
-      console.log("Selected time:", time);
-      this.selectedTime = time;
-    },
-    goToFormPage() {
-      if (this.selectedDate && this.selectedTime && this.childrenCount) {
-        // Construct the route with parameters
-        const routeParams = {
-          name: 'formPage',
-          params: {
-            selectedDate: this.selectedDate,
-            selectedTime: this.selectedTime,
-            childrenCount: this.childrenCount,
-          }
-        };
+//         this.selectedTime = null; // Reset the selected time as well
+//       }
+//     },
+//     selectedDate(newCount, oldCount) {
+//       if (newCount !== oldCount) {
+//         this.selectedTime = null; // Reset the selected time as well
+//       }
+//     }
+//   },
+//   methods: {
+//     selectDate(date) {
+//       console.log("Selected date:", date);
+//       this.selectedDate = date;
+//     },
+//     selectTime(time) {
+//       console.log("Selected time:", time);
+//       this.selectedTime = time;
+//     },
+//     goToFormPage() {
+//       if (this.selectedDate && this.selectedTime && this.childrenCount) {
+//         // Construct the route with parameters
+//         const routeParams = {
+//           name: 'formPage',
+//           params: {
+//             selectedDate: this.selectedDate,
+//             selectedTime: this.selectedTime,
+//             childrenCount: this.childrenCount,
+//           }
+//         };
 
-        // Push the route with parameters
-        this.$router.push(routeParams);
-      } else {
-        alert('日にちと時間、お子様の人数を選択してください。');
-      }
-    },
-    remainingSeats(date) {
-      if (this.reservations[date]) {
-        return Object.values(this.reservations[date]).reduce((sum, count) => sum + count, 0);
-      }
-      return 0;
-    },
-    formatDate(date) {
-      const [d, w] = date.split('(');
-      const day = w.slice(0, w.length - 1); // Remove the trailing ')' from the weekday
-      return `${d} ${day}`;
-    },
-    extraCount(count){
-      if (this.maxReservation -  parseInt(count , 10) > 0){
-        return this.maxReservation -  parseInt(count , 10)
-      }else{
-        return 0
-      }
-      //return this.maxReservation -  parseInt(count , 10)
-    },
-    isDisabled(count) {
-      return this.childrenCount > this.extraCount(count);
-    }
-  }
-}
+//         // Push the route with parameters
+//         this.$router.push(routeParams);
+//       } else {
+//         alert('日にちと時間、お子様の人数を選択してください。');
+//       }
+//     },
+//     remainingSeats(date) {
+//       if (this.reservations[date]) {
+//         return Object.values(this.reservations[date]).reduce((sum, count) => sum + count, 0);
+//       }
+//       return 0;
+//     },
+//     formatDate(date) {
+//       const [d, w] = date.split('(');
+//       const day = w.slice(0, w.length - 1); // Remove the trailing ')' from the weekday
+//       return `${d} ${day}`;
+//     },
+//     extraCount(count){
+//       if (this.maxReservation -  parseInt(count , 10) > 0){
+//         return this.maxReservation -  parseInt(count , 10)
+//       }else{
+//         return 0
+//       }
+//       //return this.maxReservation -  parseInt(count , 10)
+//     },
+//     isDisabled(count) {
+//       return this.childrenCount > this.extraCount(count);
+//     }
+//   }
+// }
 </script>
 
 

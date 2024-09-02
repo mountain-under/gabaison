@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
- 
+
   apiKey: "AIzaSyBGg9ott0si4ZcfAzSvwULbgoHq4lsL60Y",
  
   authDomain: "gabaison.firebaseapp.com",
@@ -18,6 +18,7 @@ const firebaseConfig = {
   appId: "1:699202983308:web:cff774f3d95d6d34e232a9"
  
 };
+ 
 
 
   // firebaseConfigの値を元にfirebaseの初期化
