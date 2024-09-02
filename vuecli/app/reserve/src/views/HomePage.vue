@@ -1,4 +1,5 @@
 <template>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="title-conatiner">
     <div class="upper">ホーム</div>
     <div class="lower"></div>
@@ -7,11 +8,23 @@
   <div class="body-conatiner">
 
   </div>
+
+  <img
+      loading="lazy"
+      src="https://cdn.builder.io/api/v1/image/assets/TEMP/a735cab541df0a2ebb0694177468ec5832da1c6e573c68524985aa4fcd7d7fdf?"
+      class="img"
+      @click="goToQrpage"
+    />
 </template>
 
 <script>
 export default {
   name: "BingoLayout",
+  methods: {
+    goToQrpage() {
+      this.$router.push("/qrcode");
+    },
+  },
 };
 </script>
 
@@ -19,6 +32,18 @@ export default {
 html {
   padding: 0;
 }
+
+
+.img {
+      aspect-ratio: 1;
+      object-fit: auto;
+      object-position: center;
+      width: 213px;
+      height: 213px;
+      margin-top: 30px;
+      max-width: 100%;
+      border-radius: 5px;
+    }
 
 .title-conatiner {
   width: 100%;
@@ -29,7 +54,6 @@ html {
 
 .upper {
   width: 100%;
-
   /*サガン鳥栖*/
   background-color: #00A0D2;
   color: white;

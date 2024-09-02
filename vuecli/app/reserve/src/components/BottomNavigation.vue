@@ -7,7 +7,7 @@
       </router-link>
     </div>
     <div class="nav-item">
-      <router-link to="/user-info" class="nav-link">
+      <router-link to="/Info" class="nav-link">
         <img src="@/assets/icons/user-info-icon.png" alt="ユーザ情報" />
         <span>ユーザ情報</span>
       </router-link>
@@ -25,7 +25,7 @@
       </router-link>
     </div>
     <div class="nav-item">
-      <router-link to="/settings" class="nav-link">
+      <router-link to="/teamselect" class="nav-link">
         <img src="@/assets/icons/settings-icon.png" alt="アプリ設定" />
         <span>アプリ設定</span>
       </router-link>
