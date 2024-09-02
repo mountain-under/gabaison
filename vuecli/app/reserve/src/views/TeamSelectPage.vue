@@ -109,6 +109,44 @@ export default {
 
           ],
         },
+        {
+          name: 'ヴィッセル神戸', 
+          emblem: require('@/assets/fe-vissel-kobe.webp'), 
+          players: [
+            { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
+            { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },
+            { number: 3, name: "マテウス トゥーレル", image: require('@/assets/koube/03.jpg'), position: 'DF' },
+            { number: 4, name: "山川　哲史", image: require('@/assets/koube/04.jpg'), position: 'DF' },
+            { number: 6, name: "扇原　貴宏", image: require('@/assets/koube/06.jpg'), position: 'MF' },
+            { number: 7, name: "井手口　陽介", image: require('@/assets/koube/07.jpg'), position: 'MF' },
+            { number: 9, name: "宮代　大聖", image: require('@/assets/koube/09.jpg'), position: 'FW' },
+            { number: 10, name: "大迫　勇也", image: require('@/assets/koube/10.jpg'), position: 'FW' },
+            { number: 11, name: "武藤　嘉紀", image: require('@/assets/koube/11.jpg'), position: 'FW' },
+            { number: 14, name: "汰木　康也", image: require('@/assets/koube/14.jpg'), position: 'MF' },
+            { number: 15, name: "本多　勇喜", image: require('@/assets/koube/15.jpg'), position: 'DF' },
+            { number: 16, name: "齊藤　未月", image: require('@/assets/koube/16.jpg'), position: 'MF' },
+            { number: 18, name: "井出　遥也", image: require('@/assets/koube/18.jpg'), position: 'MF' },
+            { number: 19, name: "初瀬　亮", image: require('@/assets/koube/19.jpg'), position: 'DF' },
+            { number: 21, name: "新井　章太", image: require('@/assets/koube/21.jpg'), position: 'GK' },
+            { number: 22, name: "佐々木　大樹", image: require('@/assets/koube/22.jpg'), position: 'MF' },
+            { number: 23, name: "広瀬　陸斗", image: require('@/assets/koube/23.jpg'), position: 'DF' },
+            { number: 24, name: "酒井　高徳", image: require('@/assets/koube/24.jpg'), position: 'DF' },
+            { number: 25, name: "鍬先　祐弥", image: require('@/assets/koube/25.jpg'), position: 'MF' },
+            { number: 26, name: "ジェアン パトリッキ", image: require('@/assets/koube/26.jpg'), position: 'FW' },
+            { number: 30, name: "山内　翔", image: require('@/assets/koube/30.jpg'), position: 'MF' },
+            { number: 31, name: "中坂　勇哉", image: require('@/assets/koube/31.jpg'), position: 'MF' },
+            { number: 35, name: "冨永　虹七", image: require('@/assets/koube/35.jpg'), position: 'FW' },
+            { number: 39, name: "髙山　汐生", image: require('@/assets/koube/39.jpg'), position: 'GK' },
+            { number: 44, name: "日髙　光揮", image: require('@/assets/koube/44.jpg'), position: 'MF' },
+            { number: 50, name: "オビ パウエル オビンナ", image: require('@/assets/koube/50.jpg'), position: 'GK' },
+            { number: 55, name: "岩波　拓也", image: require('@/assets/koube/55.jpg'), position: 'GK' },
+            { number: 81, name: "菊池　流帆", image: require('@/assets/koube/81.jpg'), position: 'DF' },
+            { number: 88, name: "森岡　亮太", image: require('@/assets/koube/88.jpg'), position: 'MF' },
+            { number: 96, name: "山口　蛍", image: require('@/assets/koube/96.jpg'), position: 'MF' }
+
+          ],
+
+        },
         // 他のチームを追加
       ],
       players: []
