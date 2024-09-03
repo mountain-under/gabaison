@@ -1,7 +1,7 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="title-conatiner">
-    <div class="upper">ホーム</div>
+    <div class="upper" :class="teamClass">ホーム</div>
     <div class="lower"></div>
   </div>
 
@@ -20,6 +20,11 @@ export default {
     goToQrpage() {
       this.$router.push("/qrcode");
     },
+    computed: {
+    teamClass() {
+      return this.team === 'ヴィッセル神戸' ? 'vissel' : 'tosu';
+    },
+  },
   },
 };
 </script>
@@ -53,13 +58,16 @@ html {
   /*サガン鳥栖*/
   background-color: #00A0D2;
   color: white;
-  /*ヴィッセル神戸*/
-  /* background-color: #FFFFFF; */
-  /* color: #A40931; */
+
 
   text-align: center;
   font-size: 24px;
   padding: 10px 0;
+}
+
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
 }
 
 .lower {

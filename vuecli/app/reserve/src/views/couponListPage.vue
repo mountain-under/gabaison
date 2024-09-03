@@ -1,10 +1,10 @@
 <template>
   <div class="title-container">
-    <div class="upper">クーポン一覧</div>
-    <div class="lower"></div>
+    <div class="upper" :class="teamClass">クーポン一覧</div>
+    <div class="lower" :class="teamClass"></div>
   </div>
 
-  <div class="body-container">
+  <div class="body-container" :class="teamClass">
     <ul v-if="coupons.length > 0">
       <li v-for="coupon in coupons" :key="coupon.id" class="coupon-item">
         <!-- <img src="@/assets/coupon10.png" alt="`coupon${coupon}`" class="coupon-image" /> -->
@@ -42,13 +42,27 @@ export default {
     await onAuthStateChanged(auth, (user) => {
       if (user) {
         this.uid = user.uid;
+        this.getUserData();
       } else {
         console.log('User is not logged in.');
       }
     });
 
-    await this.getUserData()
+    
 
+  },
+  computed: {
+   
+    teamClass() {
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
+    },
   },
   methods: {
 
@@ -83,25 +97,53 @@ export default {
 
 .upper {
   width: 100%;
-  background-color: #00A0D2;
-  color: white;
+  
   text-align: center;
   font-size: 24px;
   padding: 10px 0;
 }
 
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
+}
+
+.upper.tosu {
+  background-color: #00A0D2;
+  color: white;
+}
+
 .lower {
   width: 100%;
   height: 20px;
+  
+}
+
+.lower.vissel {
+  background-color: #000000;
+}
+
+.lower.tosu {
   background-color: #EC80B4;
 }
+
 
 .body-container {
   width: 100%;
   height: 1000px;
   flex-grow: 1;
+  
+}
+
+.body-container.vissel {
+  background-color: #D9D9D9;
+}
+
+.body-container.tosu {
   background-color: #CAE3EC;
 }
+
+
 
 .coupon-item {
   padding-top: 10px;

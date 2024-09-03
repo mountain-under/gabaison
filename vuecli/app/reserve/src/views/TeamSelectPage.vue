@@ -1,8 +1,8 @@
 <template>
   <div class="title-conatiner">
-    <div class="upper">応援チーム･推し選手 登録
+    <div class="upper" :class="teamClass">応援チーム･推し選手 登録
     </div>
-    <div class="lower"></div>
+    <div class="lower" :class="teamClass"></div>
   </div>
   <div class="body-conatiner">
     <div class="ask">
@@ -75,6 +75,7 @@ export default {
       showTeamDropdown: false,
       showPlayerDropdown: false,
       uid: '', // FirebaseのユーザーIDを格納
+      team: '', // チーム名を格納
       teams: [
         {
           name: 'サガン鳥栖',
@@ -166,12 +167,27 @@ export default {
         this.uid = user.uid;
         this.loadSelection();
         console.log(this.uid);
+        this.getUserData()
       } else {
         console.log('User is not logged in.');
       }
     });
+
+    
   },
   methods: {
+
+    async getUserData() {
+      try {
+        const querySnapshot = await getDoc(doc(db, 'user', this.uid));
+        this.userData = querySnapshot.data()
+        this.team = this.userData["team"]
+        console.log(this.userData)
+      } catch (error) {
+
+        console.error('Error: ', error);
+      }
+    },
     async loadSelection() {
       const userDocRef = doc(db, 'user', this.uid);
       const userDoc = await getDoc(userDocRef);
@@ -235,8 +251,21 @@ export default {
       } catch (error) {
         console.error('Error saving selection: ', error);
       }
-    }
-  }
+    },
+   
+  },
+  computed: {
+    teamClass() {
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
+    },
+}
 };
 </script>
 
@@ -251,8 +280,7 @@ export default {
   width: 100%;
 
   /*サガン鳥栖*/
-  background-color: #00A0D2;
-  color: white;
+
   /*ヴィッセル神戸*/
   /* background-color: #FFFFFF; */
   /* color: #A40931; */
@@ -262,15 +290,34 @@ export default {
   padding: 10px 0;
 }
 
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
+}
+
+.upper.tosu {
+  background-color: #00A0D2;
+  color: white;
+}
+
 .lower {
   width: 100%;
   height: 20px;
 
   /*サガン鳥栖*/
-  background-color: #EC80B4;
+
   /*ヴィッセル神戸*/
   /* background-color: #000000; */
 }
+
+.lower.vissel {
+  background-color: #000000;
+}
+
+
+.lower.tosu {
+  background-color: #EC80B4;
+} 
 
 .body-conatiner {
   width: 100%;
@@ -278,10 +325,19 @@ export default {
   flex-grow: 1;
 
   /*サガン鳥栖*/
-  background-color: #CAE3EC;
+  
   /*ヴィッセル神戸*/
   /* background-color: #D9D9D9; */
 }
+
+.body-conatiner.vissel {
+  background-color: #D9D9D9;
+}
+
+.body-conatiner.tosu {
+  background-color: #CAE3EC;
+}
+
 
 .ask {
   padding: 10px 0;

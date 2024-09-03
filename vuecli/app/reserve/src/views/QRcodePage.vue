@@ -7,8 +7,8 @@
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/93df00fc34138266fdb4a1b858262d23dc5dc1d3f04b1fffdd1ac7810d8282ec?"
         class="img" />
     </router-link>
-    <div class="upper">QRコードリーダー</div>
-    <div class="lower"></div>
+    <div class="upper" :class="teamClass">QRコードリーダー</div>
+    <div class="lower" :class="teamClass"></div>
   </div>
   <div class="scanner">
     <div class="instructions">QRコードを<br />カメラにかざしてください</div>
@@ -67,6 +67,18 @@ export default {
     this.startScanner();
   },
 
+  computed: {
+    teamClass() {
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
+    },
+  },
   methods: {
 
     saveBingoCells() {
@@ -409,6 +421,16 @@ export default {
   padding: 10px 0;
 }
 
+.upper.tosu {
+  background-color: #00A0D2;
+  color: white;
+}
+
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
+}
+
 .lower {
   width: 100%;
   height: 20px;
@@ -417,6 +439,14 @@ export default {
   background-color: #EC80B4;
   /*ヴィッセル神戸*/
   /* background-color: #000000; */
+}
+
+.lower.tosu {
+  background-color: #EC80B4;
+}
+
+.lower.vissel {
+  background-color: #000000;
 }
 
 .body-conatiner {
