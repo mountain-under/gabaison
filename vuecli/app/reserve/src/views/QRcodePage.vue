@@ -154,7 +154,7 @@ export default {
     async markNumber(board, number, type) {
       console.log(board, number, type);
       for (let i = 0; i < board.length; i++) {
-        if (board[i].number === number && board[i].type === type && board[i].marked === false) {
+        if (String(board[i].number) === String(number) && String(board[i].type) === String(type) && board[i].marked === false) {
           console.log('Marked!');
           board[i].marked = true;
           if (this.checkBingo(board)) {
@@ -196,7 +196,7 @@ export default {
           const values = decodedText.split(';');
           console.log(values)
 
-          this.markNumber(this.board, parseInt(values[1]), 1);
+          this.markNumber(this.board, parseInt(values[1]), values[3]);
           this.scheduleScreenTransition();
 
           // 分割された値を取り出す

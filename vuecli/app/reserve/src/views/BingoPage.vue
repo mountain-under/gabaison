@@ -32,14 +32,52 @@
     </div>
   </div>
 
-  <button @click="savePrediction">予想を保存</button> <!-- ここにボタンを追加 -->
+  <button @click="savePrediction" class="save-prediction-btn">予想を保存</button> <!-- ここにボタンを追加 -->
 
   <div v-if="showPopup" class="popup-overlay" @click="closePopup">
     <div class="popup">
-      <p>番号 {{ selectedNumber.number }} が選択されました！</p>
-      <p>名前 {{ selectedNumber.name }} が選択されました！</p>
-      <p>名前 {{ selectedNumber.position }} が選択されました！</p>
-      <img :src="selectedNumber.image" :alt="selectedNumber.name" class="player-image"/>
+      <!-- type 1: プレイヤー情報 -->
+      <div v-if="selectedNumber.type === 1">
+        <h3>{{ selectedNumber.name }}</h3>
+        <p>背番号: {{ selectedNumber.number }}</p>
+        <p>ポジション: {{ selectedNumber.position }}</p>
+        <img :src="selectedNumber.image" :alt="selectedNumber.name" class="player-image"/>
+      </div>
+
+      <!-- type 2: 試合結果 -->
+      <div v-else-if="selectedNumber.type === 2">
+        <h3>試合結果予想</h3>
+        <p>予想スコア: {{ selectedNumber.number }}</p>
+      </div>
+
+      <!-- type 3: 観光地情報 (佐賀城) -->
+      <div v-else-if="selectedNumber.type === 3">
+        <h3>佐賀城</h3>
+        <p>佐賀城は佐賀県佐賀市にある歴史的な城です。</p>
+        <img src='@/assets/sagajou.jpg' alt="佐賀城" class="location-image"/>
+      </div>
+
+      <!-- type 4: 観光地情報 (御船山) -->
+      <div v-else-if="selectedNumber.type === 4">
+        <h3>御船山</h3>
+        <p>御船山は美しい自然景観で知られる佐賀県の名所です。</p>
+        <img src='@/assets/mifuneyama.jpg' alt="御船山" class="location-image"/>
+      </div>
+
+      <!-- type 5: 観光地情報 (波戸岬) -->
+      <div v-else-if="selectedNumber.type === 5">
+        <h3>波戸岬</h3>
+        <p>波戸岬は海の美しさで有名な佐賀県の観光スポットです。</p>
+        <img src='@/assets/hadomisaki.jpg' alt="波戸岬" class="location-image"/>
+      </div>
+
+      <!-- type 6: 観光地情報 (鳥栖駅) -->
+      <div v-else-if="selectedNumber.type === 6">
+        <h3>鳥栖駅</h3>
+        <p>鳥栖駅は交通の要所として知られる駅です。</p>
+        <img src='@/assets/tosuStation.jpg' alt="鳥栖駅" class="location-image"/>
+      </div>
+
       <button @click="closePopup">OK</button>
     </div>
   </div>
@@ -113,14 +151,21 @@ export default {
         marked:false
       }));
 
-      bingoCells.splice(6, 0, { number: ``, name: 'Free', type: 3 , marked:false});
-      bingoCells.splice(16, 0, { number: ``, name: 'Free', type: 4 , marked:false});
-      bingoCells.splice(20, 0, { number: ``, name: 'Free', type: 5, marked:false });
-      bingoCells.splice(23, 0, { number: ``, name: 'Free', type: 6, marked:false });  
+      bingoCells.splice(6, 0, { number: ``, name: '佐賀城', type: 3 , marked:false});
+      bingoCells.splice(16, 0, { number: ``, name: '御船山', type: 4 , marked:false});
+      bingoCells.splice(20, 0, { number: ``, name: '波戸岬', type: 5, marked:false });
+      bingoCells.splice(23, 0, { number: ``, name: '鳥栖駅', type: 6, marked:false });  
+
+      bingoCells.splice(0, 0, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked:false });
+      bingoCells.splice(4, 0, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked:false });
+      bingoCells.splice(21, 0, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked:false });
+      bingoCells.splice(24, 0, { number: `Win`, name: 'Free', type: 2, marked:false });
 
       // 中央のセルにデータベースから取得したnumberを設定
       const centerIndex = 12; // ビンゴの中央のセルのインデックス
       bingoCells.splice(centerIndex, 0, { number: this.number, name: 'Central', type: 1, marked:true });
+
+
 
       return bingoCells;
     },
@@ -436,6 +481,15 @@ export default {
   margin-right: 10px;
   vertical-align: middle;
 }
+.location-image {
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+.save-prediction-btn {   
+  background-color: #007bff; /* 青色の背景 */color: #fff; /* 白い文字 */border: none;   padding: 10px 20px;   border-radius: 5px;   font-size: 16px;   cursor: pointer;   transition: background-color 0.3s ease; } .save-prediction-btn:hover {   background-color: #0056b3; /* ホバー時に少し濃い青色に変更 */ }
 
 @keyframes popup-show {
   from {
