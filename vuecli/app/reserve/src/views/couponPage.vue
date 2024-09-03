@@ -24,7 +24,7 @@
         <div class="points">
           <span class="points-amount">10%</span><span class="points-label">OFF 取得</span>
         </div>      
-        <p class="expiry">使用期限：2024年9月5日 15:29まで</p>
+        <p class="expiry">使用期限：2024年9月5日 {{ currentTime }}まで</p>
       </div>
     </div>
 
@@ -39,9 +39,9 @@
     <!-- Notice -->
     <div class="notice">
       <ul>
-        <li>キャンペーンポイントは、取得から72時間有効です。</li>
+        <li>キャンペーンポイントは、取得から48時間有効です。</li>
         <li>一部、ポイントが利用できない商品もございます。</li>
-        <li>キャンペーンポイントをご利用いただけるコスメ取り扱いショップは
+        <li>キャンペーンポイントをご利用いただけるお食事取り扱いショップは
           <a href="#">こちら</a>よりご確認ください。</li>
         <li>本キャンペーンは、バナーが表示されたお客様のみ対象です。</li>
         <li>本企画のクーポン付与は、バナーが表示された当日中のみお一人様一回です。なお、ポイントのご利用はお一人様一回までと増します。</li>
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       isLoading: true, // ロード状態を管理
+      currentTime: '', // 現在時刻を格納するデータプロパティ
     };
   },
   props: {
@@ -116,6 +117,8 @@ export default {
       this.isLoading = false;
       this.launchConfetti(); // クラッカーのエフェクトを実行
     }, 1800);
+    // 現在時刻を更新
+    this.updateCurrentTime();
   },
   methods: {
     launchConfetti() {
@@ -125,6 +128,12 @@ export default {
         spread: 70,
         origin: { y: 0.6 },
       });
+    },
+    updateCurrentTime() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      this.currentTime = `${hours}:${minutes}`; // 現在時刻を "HH:MM" フォーマットで設定
     },
   },
 };
