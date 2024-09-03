@@ -130,7 +130,7 @@ export default {
 
 .body-container {
   width: 100%;
-  height: 700px;
+  height: 1000px;
   flex-grow: 1;
   
 }

@@ -153,7 +153,7 @@ export default {
 
 .body-conatiner {
   width: 100%;
-  height: 700px;
+  height: 1000px;
   text-align: center;
 
   /*サガン鳥栖*/

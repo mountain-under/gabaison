@@ -1,7 +1,9 @@
 <template>
-  <div class="container">
-    <h1>選手ギャラリー</h1>
-    
+  <div class="title-conatiner">
+    <div class="upper">選手ギャラリー</div>
+    <div class="lower"></div>
+  </div>
+  <div class="body-conatiner">
     <!-- チーム選択 -->
     <div class="select-container">
       <div class="select-box">
@@ -14,19 +16,20 @@
     </div>
 
     <!-- ポジション選択 -->
-      <div class="select-box" v-if="selectedTeam">
-        <label>ポジションを選択</label>
-        <select v-model="selectedPosition" @change="filterByPosition">
-          <option value="">全てのポジション</option>
-          <option v-for="position in positions" :key="position" :value="position">{{ position }}</option>
-        </select>
-      </div>
-    
+    <div class="select-box" v-if="selectedTeam">
+      <label>ポジションを選択</label>
+      <select v-model="selectedPosition" @change="filterByPosition">
+        <option value="">全てのポジション</option>
+        <option v-for="position in positions" :key="position" :value="position">{{ position }}</option>
+      </select>
+    </div>
+
 
     <!-- 選手表示 -->
     <div class="images-container">
       <div v-if="players.length > 0" class="image-grid">
-        <div v-for="(player, index) in displayedPlayers" :key="index" class="image-container" @click="openModal(player)">
+        <div v-for="(player, index) in displayedPlayers" :key="index" class="image-container"
+          @click="openModal(player)">
           <img :src="player.image" :alt="player.name" />
           <p>{{ player.name }} - #{{ player.number }} - {{ player.position }}</p>
         </div>
@@ -36,7 +39,8 @@
       <!-- ページネーション -->
       <div class="pagination" v-if="players.length > playersPerPage">
         <button @click="handlePageChange(currentPage - 1)" :disabled="currentPage === 1">前</button>
-        <button @click="handlePageChange(currentPage + 1)" :disabled="currentPage * playersPerPage >= players.length">次</button>
+        <button @click="handlePageChange(currentPage + 1)"
+          :disabled="currentPage * playersPerPage >= players.length">次</button>
       </div>
     </div>
 
@@ -58,7 +62,7 @@ export default {
       teams: [
         {
           name: 'サガン鳥栖',
-           players: [
+          players: [
             { number: 1, name: 'アルナウ', image: require('@/assets/01_ARNAU-Riera-Rodriguez_EG-2.jpg'), position: 'GK' },
             { number: 2, name: '山﨑　浩介', image: require('@/assets/02_Kosuke-YAMAZAKI_EG-2.jpg'), position: 'DF' },
             { number: 3, name: '木村　誠二', image: require('@/assets/03_Seiji-KIMURA_EG-2.jpg'), position: 'DF' },
@@ -97,8 +101,8 @@ export default {
           ],
         },
         {
-          name: 'ヴィッセル神戸', 
-          emblem: require('@/assets/fe-vissel-kobe.webp'), 
+          name: 'ヴィッセル神戸',
+          emblem: require('@/assets/fe-vissel-kobe.webp'),
           players: [
             { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
             { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },
@@ -132,7 +136,7 @@ export default {
             { number: 96, name: "山口　蛍", image: require('@/assets/koube/96.jpg'), position: 'MF' }
 
           ],
-          
+
         },
         // 他のチームを追加
       ],
@@ -142,7 +146,7 @@ export default {
       filteredPlayers: [],
       displayedPlayers: [],
       currentPage: 1,
-      playersPerPage: 10, // 1ページあたり10人表示（5×2）
+      playersPerPage: 6, // 1ページあたり10人表示（5×2）
       modalPlayer: null,
     };
   },
@@ -194,6 +198,49 @@ export default {
 </script>
 
 <style scoped>
+.title-conatiner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upper {
+  width: 100%;
+
+  /*サガン鳥栖*/
+  background-color: #00A0D2;
+  color: white;
+  /*ヴィッセル神戸*/
+  /* background-color: #FFFFFF; */
+  /* color: #A40931; */
+
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.lower {
+  width: 100%;
+  height: 20px;
+
+  /*サガン鳥栖*/
+  background-color: #EC80B4;
+  /*ヴィッセル神戸*/
+  /* background-color: #000000; */
+}
+
+.body-conatiner {
+  width: 100%;
+  height: 1000px;
+  flex-grow: 1;
+
+  /*サガン鳥栖*/
+  background-color: #CAE3EC;
+  /*ヴィッセル神戸*/
+  /* background-color: #D9D9D9; */
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -210,6 +257,7 @@ export default {
 .select-box {
   flex: 1;
   margin: 0 10px;
+  padding: 10px;
 }
 
 .select-box label {
@@ -230,9 +278,15 @@ export default {
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 横に5列 */
-  grid-auto-rows: 1fr; /* 行の高さを固定 */
-  gap: 20px; /* 画像間のスペースを設定 */
+  grid-template-columns: repeat(3, 1fr);
+  /* 横に5列 */
+  grid-auto-rows: 1fr;
+  /* 行の高さを固定 */
+  gap: 10px;
+  /* 画像間のスペースを設定 */
+  padding: 10px;
+  place-content: center;
+  place-items: center;
 }
 
 .image-container {
@@ -261,7 +315,8 @@ export default {
 }
 
 .pagination {
-  margin-top: 10px; /* ボタンをもう少し上に */
+  margin-top: 10px;
+  /* ボタンをもう少し上に */
 }
 
 .pagination button {
