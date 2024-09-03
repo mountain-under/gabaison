@@ -325,7 +325,7 @@ export default {
   width: 100%;
   height: 100%;
   /* #app の高さに合わせる */
-  background-image: url('/app/reserve/src/assets/sagantosu.jpg');
+  background-image: url('@/assets/sagantosu.jpg');
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.2;
@@ -342,7 +342,7 @@ export default {
 
 /* サガン鳥栖の場合の背景 */
 #app.tosu::before {
-  background-image: url('/app/reserve/src/assets/sagantosu.jpg');
+  background-image: url('@/assets/sagantosu.jpg');
 }
 
 .bingo-grid {
