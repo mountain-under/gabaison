@@ -4,7 +4,7 @@
     </div>
     <div class="lower"></div>
   </div>
-  <div>
+  <div class="body-conatiner">
     <div class="ask">
       <b>あなたの応援チームと推し選手を選んでください</b>
     </div>
@@ -118,8 +118,8 @@ export default {
           ],
         },
         {
-          name: 'ヴィッセル神戸', 
-          emblem: require('@/assets/fe-vissel-kobe.webp'), 
+          name: 'ヴィッセル神戸',
+          emblem: require('@/assets/fe-vissel-kobe.webp'),
           players: [
             { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
             { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },
@@ -274,7 +274,7 @@ export default {
 
 .body-conatiner {
   width: 100%;
-  height: 600px;
+  height: 1000px;
   flex-grow: 1;
 
   /*サガン鳥栖*/
@@ -284,7 +284,7 @@ export default {
 }
 
 .ask {
-  margin: 10px 0;
+  padding: 10px 0;
 }
 
 .select-container {
@@ -302,6 +302,7 @@ export default {
   padding: 8px;
   margin: 10px;
   border: 1px solid #ccc;
+  background-color: white;
   cursor: pointer;
   display: flex;
   align-items: center;

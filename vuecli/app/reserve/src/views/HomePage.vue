@@ -74,7 +74,7 @@ html {
 
 .body-conatiner {
   width: 100%;
-  height: 700px;
+  height: 1000px;
   flex-grow: 1;
   /*サガン鳥栖*/
   background-color: #CAE3EC;

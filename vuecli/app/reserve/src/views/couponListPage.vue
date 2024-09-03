@@ -6,10 +6,11 @@
 
   <div class="body-container">
     <ul v-if="coupons.length > 0">
-      <li v-for="coupon in coupons" :key="coupon.id" class="coupon-item" >
+      <li v-for="coupon in coupons" :key="coupon.id" class="coupon-item">
         <!-- <img src="@/assets/coupon10.png" alt="`coupon${coupon}`" class="coupon-image" /> -->
         <!-- <img :src="`/app/reserve/src/assets/coupon${coupon}.png`" :alt="`coupon${coupon}`" class="coupon-image" /> -->
-        <img v-bind:src="require(`@/assets/coupon${coupon}.png`)" v-bind:alt="coupon" class="coupon-image" @click="goToCouponPage(key)"/>
+        <img v-bind:src="require(`@/assets/coupon${coupon}.png`)" v-bind:alt="coupon" class="coupon-image"
+          @click="goToCouponPage(key)" />
       </li>
     </ul>
     <p v-else>クーポンがありません</p>
@@ -54,7 +55,7 @@ export default {
     goToCouponPage(id) {
       this.$router.push(`/coupon${id}`);
     },
-  
+
     async getUserData() {
       try {
         const querySnapshot = await getDoc(doc(db, 'user', this.uid));
@@ -97,7 +98,7 @@ export default {
 
 .body-container {
   width: 100%;
-  height: 700px;
+  height: 1000px;
   flex-grow: 1;
   background-color: #CAE3EC;
 }

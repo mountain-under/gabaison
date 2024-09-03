@@ -68,7 +68,7 @@ export default {
   },
 
   methods: {
-    
+
     saveBingoCells() {
       setDoc(doc(db, 'user', this.uid), {
         bingoCells: this.board,
@@ -158,7 +158,7 @@ export default {
           }
         }
       }
-      
+
     },
 
     // 使用例
@@ -224,15 +224,15 @@ export default {
       this.$router.push({ name: "Home" });
     },
     scheduleScreenTransition() {
-    setTimeout(() => {
-      if (this.bingoAchieved) {
-        this.$router.push( `/coupon${1}` );  // 遷移するページを指定
-      } else {
-        this.$router.push({ name: "Home" });  // 遷移するページを指定
-      }
-    
-    }, 2000);  // 2000ミリ秒（2秒）後に遷移
-  },
+      setTimeout(() => {
+        if (this.bingoAchieved) {
+          this.$router.push(`/coupon${1}`);  // 遷移するページを指定
+        } else {
+          this.$router.push({ name: "Home" });  // 遷移するページを指定
+        }
+
+      }, 2000);  // 2000ミリ秒（2秒）後に遷移
+    },
 
   }
 };
@@ -314,7 +314,7 @@ export default {
   display: flex;
   padding: 60px 30px;
   width: 100%;
-  height: 700px;
+  height: 1000px;
   font-size: 24px;
   background-color: #CAE3EC;
   flex-direction: column;
@@ -421,7 +421,7 @@ export default {
 
 .body-conatiner {
   width: 100%;
-  height: 600px;
+  height: 1000px;
   flex-grow: 1;
 
   /*サガン鳥栖*/
