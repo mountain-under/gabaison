@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>選手ギャラリー</h1>
-    
+
     <!-- チーム選択 -->
     <div class="select-container">
       <div class="select-box">
@@ -14,19 +14,20 @@
     </div>
 
     <!-- ポジション選択 -->
-      <div class="select-box" v-if="selectedTeam">
-        <label>ポジションを選択</label>
-        <select v-model="selectedPosition" @change="filterByPosition">
-          <option value="">全てのポジション</option>
-          <option v-for="position in positions" :key="position" :value="position">{{ position }}</option>
-        </select>
-      </div>
-    
+    <div class="select-box" v-if="selectedTeam">
+      <label>ポジションを選択</label>
+      <select v-model="selectedPosition" @change="filterByPosition">
+        <option value="">全てのポジション</option>
+        <option v-for="position in positions" :key="position" :value="position">{{ position }}</option>
+      </select>
+    </div>
+
 
     <!-- 選手表示 -->
     <div class="images-container">
       <div v-if="players.length > 0" class="image-grid">
-        <div v-for="(player, index) in displayedPlayers" :key="index" class="image-container" @click="openModal(player)">
+        <div v-for="(player, index) in displayedPlayers" :key="index" class="image-container"
+          @click="openModal(player)">
           <img :src="player.image" :alt="player.name" />
           <p>{{ player.name }} - #{{ player.number }} - {{ player.position }}</p>
         </div>
@@ -36,7 +37,8 @@
       <!-- ページネーション -->
       <div class="pagination" v-if="players.length > playersPerPage">
         <button @click="handlePageChange(currentPage - 1)" :disabled="currentPage === 1">前</button>
-        <button @click="handlePageChange(currentPage + 1)" :disabled="currentPage * playersPerPage >= players.length">次</button>
+        <button @click="handlePageChange(currentPage + 1)"
+          :disabled="currentPage * playersPerPage >= players.length">次</button>
       </div>
     </div>
 
@@ -58,7 +60,7 @@ export default {
       teams: [
         {
           name: 'サガン鳥栖',
-           players: [
+          players: [
             { number: 1, name: 'アルナウ', image: require('@/assets/01_ARNAU-Riera-Rodriguez_EG-2.jpg'), position: 'GK' },
             { number: 2, name: '山﨑　浩介', image: require('@/assets/02_Kosuke-YAMAZAKI_EG-2.jpg'), position: 'DF' },
             { number: 3, name: '木村　誠二', image: require('@/assets/03_Seiji-KIMURA_EG-2.jpg'), position: 'DF' },
@@ -97,8 +99,8 @@ export default {
           ],
         },
         {
-          name: 'ヴィッセル神戸', 
-          emblem: require('@/assets/fe-vissel-kobe.webp'), 
+          name: 'ヴィッセル神戸',
+          emblem: require('@/assets/fe-vissel-kobe.jpg'),
           players: [
             { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
             { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },
@@ -132,7 +134,7 @@ export default {
             { number: 96, name: "山口　蛍", image: require('@/assets/koube/96.jpg'), position: 'MF' }
 
           ],
-          
+
         },
         // 他のチームを追加
       ],
@@ -230,9 +232,12 @@ export default {
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 横に5列 */
-  grid-auto-rows: 1fr; /* 行の高さを固定 */
-  gap: 20px; /* 画像間のスペースを設定 */
+  grid-template-columns: repeat(5, 1fr);
+  /* 横に5列 */
+  grid-auto-rows: 1fr;
+  /* 行の高さを固定 */
+  gap: 20px;
+  /* 画像間のスペースを設定 */
 }
 
 .image-container {
@@ -261,7 +266,8 @@ export default {
 }
 
 .pagination {
-  margin-top: 10px; /* ボタンをもう少し上に */
+  margin-top: 10px;
+  /* ボタンをもう少し上に */
 }
 
 .pagination button {

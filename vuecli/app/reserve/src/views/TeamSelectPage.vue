@@ -78,7 +78,7 @@ export default {
       teams: [
         {
           name: 'サガン鳥栖',
-          emblem: require('@/assets/sagantosu.webp'),
+          emblem: require('@/assets/sagantosu.jpg'),
           players: [
             { number: 1, name: 'アルナウ', image: require('@/assets/01_ARNAU-Riera-Rodriguez_EG-2.jpg'), position: 'GK' },
             { number: 2, name: '山﨑　浩介', image: require('@/assets/02_Kosuke-YAMAZAKI_EG-2.jpg'), position: 'DF' },
@@ -118,8 +118,8 @@ export default {
           ],
         },
         {
-          name: 'ヴィッセル神戸', 
-          emblem: require('@/assets/fe-vissel-kobe.webp'), 
+          name: 'ヴィッセル神戸',
+          emblem: require('@/assets/fe-vissel-kobe.jpg'),
           players: [
             { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
             { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },

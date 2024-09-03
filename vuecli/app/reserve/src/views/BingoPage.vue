@@ -2,15 +2,11 @@
   <div id="app" :class="teamClass">
     <h1>ビンゴゲーム</h1>
     <div class="bingo-grid">
-      <div
-        v-for="(cell, index) in bingoCells"
-        :key="index"
-        :class="['bingo-cell']"
-        @click="selectNumber(index, cell)"
-        :style="{ backgroundImage: `url(${getImageForType(cell.type,cell.marked)})` }"
-      >
+      <div v-for="(cell, index) in bingoCells" :key="index" :class="['bingo-cell']" @click="selectNumber(index, cell)"
+        :style="{ backgroundImage: `url(${getImageForType(cell.type, cell.marked)})` }">
         <span class="cell-number">
-          <div v-if=!cell.marked>{{ cell.number }}</div></span>
+          <div v-if=!cell.marked>{{ cell.number }}</div>
+        </span>
       </div>
     </div>
   </div>
@@ -38,7 +34,8 @@
     <div class="popup">
       <p>番号 {{ selectedNumber.number }} が選択されました！</p>
       <p>名前 {{ selectedNumber.name }} が選択されました！</p>
-      <p>タイプ {{ selectedNumber.type }} が選択されました！</p>
+      <p>名前 {{ selectedNumber.position }} が選択されました！</p>
+      <img :src="selectedNumber.image" :alt="selectedNumber.name" class="player-image" />
       <button @click="closePopup">OK</button>
     </div>
   </div>
@@ -46,6 +43,7 @@
 
 <script>
 import { saganTosuPlayers } from '@/testData/saganTosuPlayers.js'; // テストデータのインポート
+//import { koubeTosuPlayers } from '@/testData/koubePlayers.js';
 import { onAuthStateChanged } from "firebase/auth";
 import Firebase from "../firebase/firebase";
 import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
@@ -65,6 +63,8 @@ export default {
       number: 0,
       userData: '',
       team: '',
+      teamALogo: require('@/assets/bingo-saganL.png'),
+      teamBLogo: require('@/assets/bingo-visselL.png'),
     };
   },
   async created() {
@@ -88,7 +88,7 @@ export default {
     }
   },
   methods: {
-    saveBingoCells(){
+    saveBingoCells() {
       setDoc(doc(db, 'user', this.uid), {
         bingoCells: this.bingoCells,
         timestamp: new Date(),
@@ -103,18 +103,20 @@ export default {
       const bingoCells = selectedPlayers.map(player => ({
         number: player.number,
         name: player.name,
+        image: player.image,
+        position: player.position,
         type: 1,
-        marked:false
+        marked: false
       }));
 
-      bingoCells.splice(6, 0, { number: ``, name: 'Free', type: 3 , marked:false});
-      bingoCells.splice(16, 0, { number: ``, name: 'Free', type: 4 , marked:false});
-      bingoCells.splice(20, 0, { number: ``, name: 'Free', type: 5, marked:false });
-      bingoCells.splice(23, 0, { number: ``, name: 'Free', type: 6, marked:false });  
+      bingoCells.splice(6, 0, { number: ``, name: 'Free', type: 3, marked: false });
+      bingoCells.splice(16, 0, { number: ``, name: 'Free', type: 4, marked: false });
+      bingoCells.splice(20, 0, { number: ``, name: 'Free', type: 5, marked: false });
+      bingoCells.splice(23, 0, { number: ``, name: 'Free', type: 6, marked: false });
 
       // 中央のセルにデータベースから取得したnumberを設定
       const centerIndex = 12; // ビンゴの中央のセルのインデックス
-      bingoCells.splice(centerIndex, 0, { number: this.number, name: 'Central', type: 1, marked:true });
+      bingoCells.splice(centerIndex, 0, { number: this.number, name: 'Central', type: 1, marked: false });
 
       return bingoCells;
     },
@@ -126,7 +128,10 @@ export default {
       return array;
     },
     getRandomPlayers(count) {
+      //const shuffled = this.shuffleArray(koubePlayers);
       const shuffled = this.shuffleArray(saganTosuPlayers); // シャッフルして
+      console.log('シャッフル');
+      console.log(shuffled);
       return shuffled.slice(0, count); // 指定した数だけ選択
     },
     selectNumber(index, cell) {
@@ -136,7 +141,7 @@ export default {
     closePopup() {
       this.showPopup = false;
     },
-    getImageForType(type,marked) {
+    getImageForType(type, marked) {
       // タイプに応じた画像パスを返す
       if (marked) {
         switch (type) {
@@ -177,7 +182,7 @@ export default {
             return require('@/assets/tosuStation.jpg');
         }
       }
-      
+
     },
     async getUserData() {
       try {
@@ -192,7 +197,7 @@ export default {
         }
         else {
           console.log("team プロパティは存在しません");
-        } 
+        }
       } catch (error) {
         console.error('Error fetching user data: ', error);
       }
@@ -216,13 +221,16 @@ export default {
         await this.getUserData();
         if (this.userData.bingoCells) {
           this.bingoCells = this.userData.bingoCells;
-          this.bingoCells.splice(0, 1, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked:false });
-          this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked:false });
-          this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked:false });
+          this.bingoCells.splice(1, 1, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked: false });
+          this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked: false });
+          this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked: false });
           console.log(this.bingoCells)
           await this.saveBingoCells();
         } else {
           this.bingoCells = await this.generateBingoCells();
+          this.bingoCells.splice(1, 1, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked: false });
+          this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked: false });
+          this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked: false });
           await this.saveBingoCells();
         }
       } catch (error) {
@@ -245,10 +253,14 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   margin-top: 60px;
-  position: relative; /* 子要素の配置基準とする */
-  border: 2px solid rgb(90, 90, 90); /* 黒い線で囲む */
-  padding: 20px; /* 内側の余白を追加 */
-  border-radius: 5px; /* 角を少し丸くする場合 */
+  position: relative;
+  /* 子要素の配置基準とする */
+  border: 2px solid rgb(90, 90, 90);
+  /* 黒い線で囲む */
+  padding: 20px;
+  /* 内側の余白を追加 */
+  border-radius: 5px;
+  /* 角を少し丸くする場合 */
 }
 
 #app::before {
@@ -257,23 +269,26 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* #app の高さに合わせる */
-  background-image: url('/app/reserve/src/assets/sagantosu.webp');
+  height: 100%;
+  /* #app の高さに合わせる */
+  background-image: url('/app/reserve/src/assets/sagantosu.jpg');
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.2; /* エンブレム画像の透明度を設定 */
-  z-index: -1; /* 他のコンテンツの後ろに配置 */
-  background-size: auto 100%; 
+  opacity: 0.2;
+  /* エンブレム画像の透明度を設定 */
+  z-index: -1;
+  /* 他のコンテンツの後ろに配置 */
+  background-size: auto 100%;
 }
 
 /* ヴィッセル神戸の場合の背景 */
 #app.vissel::before {
-  background-image: url('/app/reserve/src/assets/fe-vissel-kobe.webp');
+  background-image: url('/app/reserve/src/assets/fe-vissel-kobe.jpg');
 }
 
 /* サガン鳥栖の場合の背景 */
 #app.tosu::before {
-  background-image: url('/app/reserve/src/assets/sagantosu.webp');
+  background-image: url('/app/reserve/src/assets/sagantosu.jpg');
 }
 
 .bingo-grid {
@@ -298,12 +313,15 @@ export default {
   font-weight: bold;
   position: relative;
   transition: background-color 0.3s, transform 0.3s;
-  color: white; /* 数字の色を白に設定 */
-  text-shadow: 1px 1px 2px black; /* 数字の視認性を高めるための影 */
+  color: white;
+  /* 数字の色を白に設定 */
+  text-shadow: 1px 1px 2px black;
+  /* 数字の視認性を高めるための影 */
 }
 
 .bingo-cell:hover {
-  background-color: rgba(0, 0, 0, 0.2); /* 画像の上にホバー効果を適用 */
+  background-color: rgba(0, 0, 0, 0.2);
+  /* 画像の上にホバー効果を適用 */
   transform: scale(1.1);
   color: white;
   /* 数字の色を白に設定 */
@@ -327,7 +345,8 @@ export default {
   font-weight: bold;
   color: white;
 
-  text-shadow: 2px 2px 4px black; /* 数字の視認性を高めるための影 */
+  text-shadow: 2px 2px 4px black;
+  /* 数字の視認性を高めるための影 */
 }
 
 .match-info {
@@ -411,6 +430,13 @@ export default {
   background-color: #ff9900;
 }
 
+.player-image {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
 @keyframes popup-show {
   from {
     transform: scale(0.5);
@@ -422,5 +448,4 @@ export default {
     opacity: 1;
   }
 }
-
 </style>
