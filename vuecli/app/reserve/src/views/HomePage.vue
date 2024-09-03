@@ -298,6 +298,9 @@ export default {
         alert("予想点数の保存に失敗しました。");
       }
     },
+    goToQrpage() {
+      this.$router.push("/qrcode");
+    },
   },
   computed: {
     teamClass() {
@@ -370,7 +373,7 @@ html {
   height: 1000px;
   flex-grow: 1;
   /*サガン鳥栖*/
-  background-color: #CAE3EC;
+  /* background-color: #CAE3EC; */
   margin: 0;
   padding-top: 60px;
   /*ヴィッセル神戸*/
@@ -571,10 +574,11 @@ html {
 }
  
 .player-image {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-  vertical-align: middle;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 5px;
+  object-fit: cover;
 }
  
 .location-image {
