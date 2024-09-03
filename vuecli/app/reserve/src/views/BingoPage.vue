@@ -485,10 +485,11 @@ export default {
 }
 
 .player-image {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-  vertical-align: middle;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 5px;
+  object-fit: cover;
 }
 .location-image {
   width: 100%;
