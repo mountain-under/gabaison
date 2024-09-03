@@ -337,7 +337,7 @@ export default {
 
 /* ヴィッセル神戸の場合の背景 */
 #app.vissel::before {
-  background-image: url('/app/reserve/src/assets/fe-vissel-kobe.jpg');
+  background-image: url('@/assets/fe-vissel-kobe.jpg');
 }
 
 /* サガン鳥栖の場合の背景 */
