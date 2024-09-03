@@ -28,7 +28,8 @@
     <!-- 選手表示 -->
     <div class="images-container">
       <div v-if="players.length > 0" class="image-grid">
-        <div v-for="(player, index) in displayedPlayers" :key="index" class="image-container" @click="openModal(player)">
+        <div v-for="(player, index) in displayedPlayers" :key="index" class="image-container"
+          @click="openModal(player)">
           <img :src="player.image" :alt="player.name" />
           <p>{{ player.name }} - #{{ player.number }} - {{ player.position }}</p>
         </div>
@@ -111,7 +112,9 @@ export default {
         },
         {
           name: 'ヴィッセル神戸',
-          emblem: require('@/assets/fe-vissel-kobe.webp'),
+
+          emblem: require('@/assets/fe-vissel-kobe.jpg'),
+
           players: [
             { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
             { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },
@@ -348,15 +351,13 @@ export default {
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns: repeat(5, 1fr);
   /* 横に5列 */
   grid-auto-rows: 1fr;
   /* 行の高さを固定 */
-  gap: 10px;
+  gap: 20px;
   /* 画像間のスペースを設定 */
-  padding: 10px;
-  place-content: center;
-  place-items: center;
 }
 
 .image-container {
