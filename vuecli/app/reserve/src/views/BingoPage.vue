@@ -233,7 +233,14 @@ export default {
   },
   computed: {
     teamClass() {
-      return this.team === 'ヴィッセル神戸' ? 'vissel' : 'tosu';
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
     },
   },
 };
