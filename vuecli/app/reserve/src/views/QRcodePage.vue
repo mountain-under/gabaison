@@ -10,7 +10,7 @@
     <div class="upper" :class="teamClass">QRコードリーダー</div>
     <div class="lower" :class="teamClass"></div>
   </div>
-  <div class="scanner">
+  <div class="scanner" :class="teamClass">
     <div class="instructions">QRコードを<br />カメラにかざしてください</div>
     <div id="qr-reader" class="qr-reader"></div>
     <div id="qr-reader-results" class="results"></div>
@@ -328,12 +328,13 @@ export default {
   width: 100%;
   height: 1000px;
   font-size: 24px;
-  background-color: #CAE3EC;
+  
   flex-direction: column;
   white-space: nowrap;
   letter-spacing: -0.53px;
   line-height: 42px;
 }
+
 
 .instructions {
   font-family: M PLUS Code Latin, sans-serif;
@@ -459,4 +460,12 @@ export default {
   /*ヴィッセル神戸*/
   /* background-color: #D9D9D9; */
 }
+
+.scanner.tosu {
+  background-color: #CAE3EC;
+}
+.scanner.vissel {
+  background-color: #D9D9D9;
+}
+
 </style>
