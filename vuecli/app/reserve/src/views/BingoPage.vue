@@ -38,7 +38,8 @@
     <div class="popup">
       <p>番号 {{ selectedNumber.number }} が選択されました！</p>
       <p>名前 {{ selectedNumber.name }} が選択されました！</p>
-      <p>タイプ {{ selectedNumber.type }} が選択されました！</p>
+      <p>名前 {{ selectedNumber.position }} が選択されました！</p>
+      <img :src="selectedNumber.image" :alt="selectedNumber.name" class="player-image"/>
       <button @click="closePopup">OK</button>
     </div>
   </div>
@@ -46,6 +47,7 @@
 
 <script>
 import { saganTosuPlayers } from '@/testData/saganTosuPlayers.js'; // テストデータのインポート
+//import { koubeTosuPlayers } from '@/testData/koubePlayers.js';
 import { onAuthStateChanged } from "firebase/auth";
 import Firebase from "../firebase/firebase";
 import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
@@ -65,6 +67,8 @@ export default {
       number: 0,
       userData: '',
       team: '',
+      teamALogo: require('@/assets/bingo-saganL.png'),
+      teamBLogo: require('@/assets/bingo-visselL.png'),
     };
   },
   async created() {
@@ -103,6 +107,8 @@ export default {
       const bingoCells = selectedPlayers.map(player => ({
         number: player.number,
         name: player.name,
+        image: player.image,
+        position: player.position,
         type: 1,
         marked:false
       }));
@@ -126,7 +132,10 @@ export default {
       return array;
     },
     getRandomPlayers(count) {
+      //const shuffled = this.shuffleArray(koubePlayers);
       const shuffled = this.shuffleArray(saganTosuPlayers); // シャッフルして
+      console.log('シャッフル');
+      console.log(shuffled);
       return shuffled.slice(0, count); // 指定した数だけ選択
     },
     selectNumber(index, cell) {
@@ -223,6 +232,9 @@ export default {
           await this.saveBingoCells();
         } else {
           this.bingoCells = await this.generateBingoCells();
+          this.bingoCells.splice(0, 1, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked:false });
+          this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked:false });
+          this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked:false });
           await this.saveBingoCells();
         }
       } catch (error) {
@@ -416,6 +428,13 @@ export default {
 
 .popup button:hover {
   background-color: #ff9900;
+}
+
+.player-image {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
 @keyframes popup-show {
