@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     geturl() {
-      return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.uid) + ';' + encodeURIComponent(this.number) + ';' + encodeURIComponent(this.team)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=10&ecc=L&size=213x213`;
+      return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.uid) + ';' + encodeURIComponent(this.number) + ';' + encodeURIComponent(this.team)+';1'}&bgcolor=F2F2F2&color=111111&qzone=0&margin=10&ecc=L&size=213x213`;
     },
     teamClass() {
       console.log(this.team)
