@@ -1,10 +1,10 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="title-conatiner">
-    <div class="upper">ユーザ情報</div>
-    <div class="lower"></div>
+    <div class="upper" :class="teamClass">ユーザ情報</div>
+    <div class="lower" :class="teamClass"></div>
   </div>
-  <div class="body-conatiner">
+  <div class="body-conatiner" :class="teamClass">
     <div ref="qrCodeContainer">
       <img :src="geturl" :alt="uid" class="img" />
     </div>
@@ -57,14 +57,6 @@ export default {
     await this.getUserData()
 
   },
-  computed: {
-    allowance() {
-      return 300 * this.childrenCount;
-    },
-    geturl() {
-      return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.uid) + ';' + encodeURIComponent(this.number) + ';' + encodeURIComponent(this.team)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=10&ecc=L&size=213x213`;
-    }
-  },
   methods: {
     async saveQrCode() {
       // try {
@@ -83,13 +75,28 @@ export default {
         this.number = this.userData["number"]
         this.team = this.userData["team"]
       } catch (error) {
-        console.error('Error fetching TA and Technical Assistant data: ', error);
+        console.error('Error: ', error);
       }
     },
     async reload() {
       await this.getUserData()
     }
-  }
+  },
+  computed: {
+    geturl() {
+      return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(this.uid) + ';' + encodeURIComponent(this.number) + ';' + encodeURIComponent(this.team)}&bgcolor=F2F2F2&color=111111&qzone=0&margin=10&ecc=L&size=213x213`;
+    },
+    teamClass() {
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
+    },
+  },
 }
 </script>
 
@@ -105,8 +112,7 @@ export default {
   width: 100%;
 
   /*サガン鳥栖*/
-  background-color: #00A0D2;
-  color: white;
+
   /*ヴィッセル神戸*/
   /* background-color: #FFFFFF; */
   /* color: #A40931; */
@@ -116,25 +122,52 @@ export default {
   padding: 10px 0;
 }
 
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
+}
+
+.upper.tosu {
+  background-color: #00A0D2;
+  color: white;
+}
+
 .lower {
   width: 100%;
   height: 20px;
 
   /*サガン鳥栖*/
-  background-color: #EC80B4;
+
   /*ヴィッセル神戸*/
   /* background-color: #000000; */
 }
 
+.lower.vissel {
+  background-color: #000000;
+}
+
+
+.lower.tosu {
+  background-color: #EC80B4;
+} 
+
 .body-conatiner {
   width: 100%;
-  height: 700px;
+  height: 1000px;
   text-align: center;
 
   /*サガン鳥栖*/
-  background-color: #CAE3EC;
+  
   /*ヴィッセル神戸*/
   /* background-color: #D9D9D9; */
+}
+
+.body-conatiner.vissel {
+  background-color: #D9D9D9;
+}
+
+.body-conatiner.tosu {
+  background-color: #CAE3EC;
 }
 
 .refresh-button {

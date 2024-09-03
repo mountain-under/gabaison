@@ -35,7 +35,7 @@
       <p>番号 {{ selectedNumber.number }} が選択されました！</p>
       <p>名前 {{ selectedNumber.name }} が選択されました！</p>
       <p>名前 {{ selectedNumber.position }} が選択されました！</p>
-      <img :src="selectedNumber.image" :alt="selectedNumber.name" class="player-image" />
+      <img :src="selectedNumber.image" :alt="selectedNumber.name" class="player-image"/>
       <button @click="closePopup">OK</button>
     </div>
   </div>
@@ -228,9 +228,9 @@ export default {
           await this.saveBingoCells();
         } else {
           this.bingoCells = await this.generateBingoCells();
-          this.bingoCells.splice(1, 1, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked: false });
-          this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked: false });
-          this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked: false });
+          this.bingoCells.splice(0, 1, { number: `${this.teamAScore}-${this.teamBScore}`, name: 'Free', type: 2, marked:false });
+          this.bingoCells.splice(4, 1, { number: `${this.teamAScore}`, name: 'Free', type: 2, marked:false });
+          this.bingoCells.splice(22, 1, { number: `${this.teamBScore}`, name: 'Free', type: 2, marked:false });
           await this.saveBingoCells();
         }
       } catch (error) {
@@ -241,7 +241,14 @@ export default {
   },
   computed: {
     teamClass() {
-      return this.team === 'ヴィッセル神戸' ? 'vissel' : 'tosu';
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
     },
   },
 };

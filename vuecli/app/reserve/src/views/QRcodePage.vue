@@ -7,10 +7,10 @@
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/93df00fc34138266fdb4a1b858262d23dc5dc1d3f04b1fffdd1ac7810d8282ec?"
         class="img" />
     </router-link>
-    <div class="upper">QRコードリーダー</div>
-    <div class="lower"></div>
+    <div class="upper" :class="teamClass">QRコードリーダー</div>
+    <div class="lower" :class="teamClass"></div>
   </div>
-  <div class="scanner">
+  <div class="scanner" :class="teamClass">
     <div class="instructions">QRコードを<br />カメラにかざしてください</div>
     <div id="qr-reader" class="qr-reader"></div>
     <div id="qr-reader-results" class="results"></div>
@@ -67,8 +67,20 @@ export default {
     this.startScanner();
   },
 
+  computed: {
+    teamClass() {
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
+    },
+  },
   methods: {
-    
+
     saveBingoCells() {
       setDoc(doc(db, 'user', this.uid), {
         bingoCells: this.board,
@@ -158,7 +170,7 @@ export default {
           }
         }
       }
-      
+
     },
 
     // 使用例
@@ -224,15 +236,15 @@ export default {
       this.$router.push({ name: "Home" });
     },
     scheduleScreenTransition() {
-    setTimeout(() => {
-      if (this.bingoAchieved) {
-        this.$router.push( `/coupon${1}` );  // 遷移するページを指定
-      } else {
-        this.$router.push({ name: "Home" });  // 遷移するページを指定
-      }
-    
-    }, 2000);  // 2000ミリ秒（2秒）後に遷移
-  },
+      setTimeout(() => {
+        if (this.bingoAchieved) {
+          this.$router.push(`/coupon${1}`);  // 遷移するページを指定
+        } else {
+          this.$router.push({ name: "Home" });  // 遷移するページを指定
+        }
+
+      }, 2000);  // 2000ミリ秒（2秒）後に遷移
+    },
 
   }
 };
@@ -314,14 +326,15 @@ export default {
   display: flex;
   padding: 60px 30px;
   width: 100%;
-  height: 700px;
+  height: 1000px;
   font-size: 24px;
-  background-color: #CAE3EC;
+  
   flex-direction: column;
   white-space: nowrap;
   letter-spacing: -0.53px;
   line-height: 42px;
 }
+
 
 .instructions {
   font-family: M PLUS Code Latin, sans-serif;
@@ -409,6 +422,16 @@ export default {
   padding: 10px 0;
 }
 
+.upper.tosu {
+  background-color: #00A0D2;
+  color: white;
+}
+
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
+}
+
 .lower {
   width: 100%;
   height: 20px;
@@ -419,9 +442,17 @@ export default {
   /* background-color: #000000; */
 }
 
+.lower.tosu {
+  background-color: #EC80B4;
+}
+
+.lower.vissel {
+  background-color: #000000;
+}
+
 .body-conatiner {
   width: 100%;
-  height: 600px;
+  height: 1000px;
   flex-grow: 1;
 
   /*サガン鳥栖*/
@@ -429,4 +460,12 @@ export default {
   /*ヴィッセル神戸*/
   /* background-color: #D9D9D9; */
 }
+
+.scanner.tosu {
+  background-color: #CAE3EC;
+}
+.scanner.vissel {
+  background-color: #D9D9D9;
+}
+
 </style>

@@ -1,7 +1,9 @@
 <template>
-  <div class="container">
-    <h1>選手ギャラリー</h1>
-
+  <div class="title-conatiner">
+    <div class="upper" :class="teamClass">選手ギャラリー</div>
+    <div class="lower" :class="teamClass"></div>
+  </div>
+  <div class="body-conatiner" :class="teamClass">
     <!-- チーム選択 -->
     <div class="select-container">
       <div class="select-box">
@@ -54,9 +56,19 @@
 </template>
 
 <script>
+
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
+const auth = getAuth();
+const db = getFirestore();
+
 export default {
   data() {
     return {
+      uid: '', // FirebaseのユーザーIDを格納
+      team: '', // チーム名を格納
       teams: [
         {
           name: 'サガン鳥栖',
@@ -100,7 +112,9 @@ export default {
         },
         {
           name: 'ヴィッセル神戸',
+
           emblem: require('@/assets/fe-vissel-kobe.jpg'),
+
           players: [
             { number: 1, name: "前川　黛也", image: require('@/assets/koube/01.jpg'), position: 'GK' },
             { number: 2, name: "飯野　七聖", image: require('@/assets/koube/02.jpg'), position: 'MF' },
@@ -144,7 +158,7 @@ export default {
       filteredPlayers: [],
       displayedPlayers: [],
       currentPage: 1,
-      playersPerPage: 10, // 1ページあたり10人表示（5×2）
+      playersPerPage: 6, // 1ページあたり10人表示（5×2）
       modalPlayer: null,
     };
   },
@@ -152,9 +166,43 @@ export default {
     positions() {
       const allPositions = this.players.map(player => player.position);
       return [...new Set(allPositions)]; // 重複を除いたポジションリストを返す
-    }
+    },
+    teamClass() {
+      console.log(this.team)
+      if (this.team === 'サガン鳥栖') {
+        return 'tosu';
+      } else if (this.team === 'ヴィッセル神戸') {
+        return 'vissel';
+      } else {
+        return '';
+      }
+    },
   },
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.uid = user.uid;
+
+        console.log(this.uid);
+        this.getUserData()
+      } else {
+        console.log('User is not logged in.');
+      }
+    });
+  },
+
   methods: {
+    async getUserData() {
+      try {
+        const querySnapshot = await getDoc(doc(db, 'user', this.uid));
+        this.userData = querySnapshot.data()
+        this.team = this.userData["team"]
+        console.log(this.userData)
+      } catch (error) {
+
+        console.error('Error: ', error);
+      }
+    },
     loadPlayers() {
       const team = this.teams.find(t => t.name === this.selectedTeam);
       if (team) {
@@ -196,6 +244,76 @@ export default {
 </script>
 
 <style scoped>
+.title-conatiner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upper {
+  width: 100%;
+
+  /*サガン鳥栖*/
+
+  /*ヴィッセル神戸*/
+  /* background-color: #FFFFFF; */
+  /* color: #A40931; */
+
+  text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+.upper.vissel {
+  background-color: #FFFFFF;
+  color: #A40931;
+}
+
+.upper.tosu {
+  background-color: #00A0D2;
+  color: white;
+}
+
+.lower {
+  width: 100%;
+  height: 20px;
+
+  /*サガン鳥栖*/
+
+  /*ヴィッセル神戸*/
+  /* background-color: #000000; */
+}
+
+.lower.vissel {
+  background-color: #000000;
+}
+
+
+.lower.tosu {
+  background-color: #EC80B4;
+} 
+
+.body-conatiner {
+  width: 100%;
+  height: 1000px;
+  flex-grow: 1;
+
+  /*サガン鳥栖*/
+  
+  /*ヴィッセル神戸*/
+  /* background-color: #D9D9D9; */
+}
+
+.body-conatiner.vissel {
+  background-color: #D9D9D9;
+}
+
+.body-conatiner.tosu {
+  background-color: #CAE3EC;
+}
+
+
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -212,6 +330,7 @@ export default {
 .select-box {
   flex: 1;
   margin: 0 10px;
+  padding: 10px;
 }
 
 .select-box label {
@@ -232,6 +351,7 @@ export default {
 
 .image-grid {
   display: grid;
+
   grid-template-columns: repeat(5, 1fr);
   /* 横に5列 */
   grid-auto-rows: 1fr;
