@@ -352,7 +352,7 @@ export default {
 .image-grid {
   display: grid;
 
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   /* 横に5列 */
   grid-auto-rows: 1fr;
   /* 行の高さを固定 */
