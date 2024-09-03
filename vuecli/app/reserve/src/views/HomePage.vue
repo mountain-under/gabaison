@@ -84,11 +84,13 @@
         <button @click="closePopup">OK</button>
       </div>
     </div>
- 
+ <div class="qr-container">
     <img loading="lazy"
       src="https://cdn.builder.io/api/v1/image/assets/TEMP/a735cab541df0a2ebb0694177468ec5832da1c6e573c68524985aa4fcd7d7fdf?"
       class="QRbutton" @click="goToQrpage" />
   </div>
+</div>
+
  
 </template>
  
@@ -373,19 +375,23 @@ html {
   height: 1000px;
   flex-grow: 1;
   /*サガン鳥栖*/
-  /* background-color: #CAE3EC; */
+  background-color: #CAE3EC;
   margin: 0;
   padding-top: 60px;
   /*ヴィッセル神戸*/
   /* background-color: #D9D9D9; */
 }
  
+.qr-container{
+  position: absolute;
+  right:10px;
+}
 .QRbutton {
   height: 100px;
   width: 100px;
-  position: absolute;
+  /* position: absolute;
   bottom: 100px;
-  right: 10px;
+  right: 10px; */
   border-radius: 50%;
   z-index: 10;
 }
